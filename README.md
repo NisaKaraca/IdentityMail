@@ -49,7 +49,7 @@ Admin kullanıcıları ise sistem genelindeki kullanıcıları, mesajları, kate
 
 ### Admin Kullanıcı Yönetimi
 
-<img width="1895" height="983" alt="image (10)" src="https://github.com/user-attachments/assets/50b85873-a8cf-4b43-a58f-91ff4600f52b" />
+<img width="1894" height="980" alt="image (11)" src="https://github.com/user-attachments/assets/55db0c02-204f-45cd-8d54-271d49df3a37" />
 
 ### Admin Mesaj Yönetimi
 
