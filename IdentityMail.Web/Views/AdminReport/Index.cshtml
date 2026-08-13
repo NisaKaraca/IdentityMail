@@ -1,0 +1,177 @@
+﻿@model List<IdentityMail.Web.DTOs.AdminReportDtos.AdminReportListDto>
+
+@{
+    ViewData["Title"] = "Şikâyetler";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="mb-lg flex flex-col gap-md
+            md:flex-row md:items-end md:justify-between">
+
+    <div>
+        <h1 class="text-3xl font-bold text-on-surface">
+            Şikâyetler
+        </h1>
+
+        <p class="mt-xs text-sm text-on-surface-variant">
+            Kullanıcıların bildirdiği mesajları inceleyin.
+        </p>
+    </div>
+
+    <form method="get"
+          asp-controller="AdminReport"
+          asp-action="Index">
+
+        <select name="status"
+                onchange="this.form.submit()"
+                class="rounded-lg border border-surface-variant
+                       bg-surface px-md py-sm text-sm">
+
+            <option value="">Tüm şikâyetler</option>
+
+            <option value="pending"
+                    selected="@(ViewBag.Status == "pending")">
+                Bekleyenler
+            </option>
+
+            <option value="resolved"
+                    selected="@(ViewBag.Status == "resolved")">
+                Çözülenler
+            </option>
+
+        </select>
+
+    </form>
+
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="mb-md rounded-lg border border-green-200
+                    bg-green-50 px-md py-sm text-green-700">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<section class="overflow-hidden rounded-xl
+                border border-surface-variant
+                bg-surface shadow-sm">
+
+    @if (Model.Any())
+    {
+        <div class="overflow-x-auto">
+
+            <table class="w-full min-w-[900px]">
+
+                <thead class="bg-surface-container-low">
+
+                    <tr class="text-left text-xs font-semibold uppercase
+                                   tracking-wider text-on-surface-variant">
+
+                        <th class="px-lg py-md">Mesaj</th>
+                        <th class="px-lg py-md">Gönderen</th>
+                        <th class="px-lg py-md">Şikâyet Eden</th>
+                        <th class="px-lg py-md">Neden</th>
+                        <th class="px-lg py-md">Tarih</th>
+                        <th class="px-lg py-md">Durum</th>
+                        <th class="px-lg py-md text-right">İşlem</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-surface-variant">
+
+                    @foreach (var report in Model)
+                    {
+                        <tr class="hover:bg-surface-container-low/60">
+
+                            <td class="px-lg py-md font-semibold">
+                                @report.Subject
+                            </td>
+
+                            <td class="px-lg py-md text-sm">
+                                @report.SenderFullName
+                            </td>
+
+                            <td class="px-lg py-md text-sm">
+                                @report.ReportedByFullName
+                            </td>
+
+                            <td class="px-lg py-md">
+                                <span class="rounded-full bg-red-50
+                                                     px-sm py-1 text-xs
+                                                     font-semibold text-red-700">
+                                    @report.Reason
+                                </span>
+                            </td>
+
+                            <td class="px-lg py-md text-sm
+                                               text-on-surface-variant">
+                                @report.ReportDate.ToString("dd.MM.yyyy HH:mm")
+                            </td>
+
+                            <td class="px-lg py-md">
+
+                                <span class="rounded-full px-sm py-1
+                                                     text-xs font-semibold
+                                                     @(report.IsResolved
+                                                                                       ? "bg-green-100 text-green-700"
+                                                                                       : "bg-yellow-100 text-yellow-700")">
+
+                                    @(report.IsResolved
+                                                                ? "Çözüldü"
+                                                                : "Bekliyor")
+
+                        </span>
+
+                            </td>
+
+                            <td class="px-lg py-md text-right">
+
+                                <a asp-controller="AdminReport"
+                                   asp-action="Detail"
+                                   asp-route-id="@report.Id"
+                                   class="inline-flex items-center gap-xs
+                                                  rounded-lg border
+                                                  border-surface-variant
+                                                  px-sm py-xs text-sm
+                                                  font-semibold text-primary">
+
+                                    <span class="material-symbols-outlined">
+                                        visibility
+                                    </span>
+
+                                    İncele
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                                }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="flex min-h-[320px] flex-col
+                        items-center justify-center text-center">
+
+            <span class="material-symbols-outlined
+                             text-6xl text-outline">
+                verified
+            </span>
+
+            <p class="mt-sm text-on-surface-variant">
+                Bu filtreye uygun şikâyet bulunmuyor.
+            </p>
+
+        </div>
+    }
+
+</section>

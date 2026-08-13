@@ -1,0 +1,461 @@
+﻿@model IdentityMail.Web.DTOs.MessageReportDtos.CreateMessageReportDto
+
+@{
+    ViewData["Title"] = "Mesajı Şikâyet Et";
+    Layout = "~/Views/MailLayout/Index.cshtml";
+}
+
+<div class="mx-auto flex w-full max-w-3xl flex-col gap-6">
+
+    <div class="flex items-center gap-3
+                border-b border-slate-200 pb-4">
+
+        <a asp-controller="Message"
+           asp-action="MailDetail"
+           asp-route-id="@Model.MessageId"
+           title="Mesaja dön"
+           class="flex h-10 w-10 shrink-0
+                  items-center justify-center
+                  rounded-full text-slate-500
+                  transition
+                  hover:bg-slate-100
+                  hover:text-blue-600">
+
+            <span class="material-symbols-outlined">
+                arrow_back
+            </span>
+
+        </a>
+
+        <div>
+
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900">
+                Mesajı Şikâyet Et
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Bildiriminiz incelenmek üzere yöneticiye iletilecektir.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="flex items-start gap-3
+                rounded-xl border border-blue-100
+                bg-blue-50 px-4 py-3">
+
+        <span class="material-symbols-outlined
+                     mt-0.5 text-[21px] text-blue-600">
+            info
+        </span>
+
+        <div>
+
+            <p class="text-sm font-semibold text-blue-900">
+                Şikâyetiniz gizli tutulur
+            </p>
+
+            <p class="mt-1 text-sm leading-6 text-blue-700">
+                Şikâyet edilen kullanıcı, bildirimi kimin yaptığını göremez.
+                Lütfen durumu en doğru açıklayan nedeni seçin.
+            </p>
+
+        </div>
+
+    </div>
+
+    <section class="overflow-hidden rounded-2xl
+                    border border-slate-200
+                    bg-white shadow-sm">
+
+        <form asp-controller="Message"
+              asp-action="Report"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="MessageId" type="hidden" />
+
+            <div class="space-y-7 p-6 md:p-8">
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="ModelOnly"
+                         class="rounded-lg border border-red-200
+                                    bg-red-50 px-4 py-3
+                                    text-sm text-red-600">
+                    </div>
+                }
+
+                <fieldset>
+
+                    <legend class="text-sm font-semibold text-slate-800">
+                        Şikâyet nedeni
+                    </legend>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        Bu mesajı neden bildirdiğinizi seçin.
+                    </p>
+
+                    <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+                        <label class="report-option group cursor-pointer">
+
+                            <input asp-for="Reason"
+                                   type="radio"
+                                   value="Spam"
+                                   class="peer sr-only" />
+
+                            <div class="flex h-full items-start gap-3
+                                        rounded-xl border border-slate-200
+                                        bg-white p-4 transition
+                                        group-hover:border-blue-200
+                                        group-hover:bg-blue-50/50
+                                        peer-checked:border-blue-500
+                                        peer-checked:bg-blue-50
+                                        peer-checked:ring-1
+                                        peer-checked:ring-blue-500">
+
+                                <div class="flex h-10 w-10 shrink-0
+                                            items-center justify-center
+                                            rounded-lg bg-orange-50
+                                            text-orange-600">
+
+                                    <span class="material-symbols-outlined">
+                                        mark_email_unread
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="font-semibold text-slate-800">
+                                        Spam
+                                    </p>
+
+                                    <p class="mt-1 text-sm leading-5 text-slate-500">
+                                        İstenmeyen veya tekrarlayan mesaj.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                        <label class="report-option group cursor-pointer">
+
+                            <input asp-for="Reason"
+                                   type="radio"
+                                   value="Taciz veya hakaret"
+                                   class="peer sr-only" />
+
+                            <div class="flex h-full items-start gap-3
+                                        rounded-xl border border-slate-200
+                                        bg-white p-4 transition
+                                        group-hover:border-blue-200
+                                        group-hover:bg-blue-50/50
+                                        peer-checked:border-blue-500
+                                        peer-checked:bg-blue-50
+                                        peer-checked:ring-1
+                                        peer-checked:ring-blue-500">
+
+                                <div class="flex h-10 w-10 shrink-0
+                                            items-center justify-center
+                                            rounded-lg bg-red-50
+                                            text-red-600">
+
+                                    <span class="material-symbols-outlined">
+                                        person_alert
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="font-semibold text-slate-800">
+                                        Taciz veya hakaret
+                                    </p>
+
+                                    <p class="mt-1 text-sm leading-5 text-slate-500">
+                                        Rahatsız edici veya saldırgan iletişim.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                        <label class="report-option group cursor-pointer">
+
+                            <input asp-for="Reason"
+                                   type="radio"
+                                   value="Uygunsuz içerik"
+                                   class="peer sr-only" />
+
+                            <div class="flex h-full items-start gap-3
+                                        rounded-xl border border-slate-200
+                                        bg-white p-4 transition
+                                        group-hover:border-blue-200
+                                        group-hover:bg-blue-50/50
+                                        peer-checked:border-blue-500
+                                        peer-checked:bg-blue-50
+                                        peer-checked:ring-1
+                                        peer-checked:ring-blue-500">
+
+                                <div class="flex h-10 w-10 shrink-0
+                                            items-center justify-center
+                                            rounded-lg bg-purple-50
+                                            text-purple-600">
+
+                                    <span class="material-symbols-outlined">
+                                        visibility_off
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="font-semibold text-slate-800">
+                                        Uygunsuz içerik
+                                    </p>
+
+                                    <p class="mt-1 text-sm leading-5 text-slate-500">
+                                        Topluluk kurallarına aykırı içerik.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                        <label class="report-option group cursor-pointer">
+
+                            <input asp-for="Reason"
+                                   type="radio"
+                                   value="Dolandırıcılık"
+                                   class="peer sr-only" />
+
+                            <div class="flex h-full items-start gap-3
+                                        rounded-xl border border-slate-200
+                                        bg-white p-4 transition
+                                        group-hover:border-blue-200
+                                        group-hover:bg-blue-50/50
+                                        peer-checked:border-blue-500
+                                        peer-checked:bg-blue-50
+                                        peer-checked:ring-1
+                                        peer-checked:ring-blue-500">
+
+                                <div class="flex h-10 w-10 shrink-0
+                                            items-center justify-center
+                                            rounded-lg bg-yellow-50
+                                            text-yellow-700">
+
+                                    <span class="material-symbols-outlined">
+                                        gpp_maybe
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="font-semibold text-slate-800">
+                                        Dolandırıcılık
+                                    </p>
+
+                                    <p class="mt-1 text-sm leading-5 text-slate-500">
+                                        Yanıltıcı bilgi veya şüpheli talep.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                        <label class="report-option group cursor-pointer sm:col-span-2">
+
+                            <input asp-for="Reason"
+                                   type="radio"
+                                   value="Diğer"
+                                   class="peer sr-only" />
+
+                            <div class="flex items-start gap-3
+                                        rounded-xl border border-slate-200
+                                        bg-white p-4 transition
+                                        group-hover:border-blue-200
+                                        group-hover:bg-blue-50/50
+                                        peer-checked:border-blue-500
+                                        peer-checked:bg-blue-50
+                                        peer-checked:ring-1
+                                        peer-checked:ring-blue-500">
+
+                                <div class="flex h-10 w-10 shrink-0
+                                            items-center justify-center
+                                            rounded-lg bg-slate-100
+                                            text-slate-600">
+
+                                    <span class="material-symbols-outlined">
+                                        more_horiz
+                                    </span>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="font-semibold text-slate-800">
+                                        Diğer
+                                    </p>
+
+                                    <p class="mt-1 text-sm leading-5 text-slate-500">
+                                        Yukarıdaki seçeneklerin dışında bir durum.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                    </div>
+
+                    <span asp-validation-for="Reason"
+                          class="mt-2 block text-sm text-red-600">
+                    </span>
+
+                </fieldset>
+
+                <div>
+
+                    <div class="mb-2 flex items-end justify-between gap-3">
+
+                        <div>
+
+                            <label asp-for="Description"
+                                   class="block text-sm
+                                          font-semibold text-slate-800">
+
+                                Açıklama
+
+                                <span class="font-normal text-slate-400">
+                                    (İsteğe bağlı)
+                                </span>
+
+                            </label>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                İncelemeye yardımcı olacak ek bilgileri yazabilirsiniz.
+                            </p>
+
+                        </div>
+
+                        <span id="descriptionCount"
+                              class="shrink-0 text-xs text-slate-400">
+                            0 / 500
+                        </span>
+
+                    </div>
+
+                    <textarea asp-for="Description"
+                              id="reportDescription"
+                              rows="5"
+                              maxlength="500"
+                              placeholder="Durumu kısaca açıklayın..."
+                              class="w-full resize-y rounded-xl
+                                     border border-slate-200
+                                     bg-slate-50 px-4 py-3
+                                     text-sm leading-6 text-slate-800
+                                     outline-none transition
+                                     placeholder:text-slate-400
+                                     focus:border-blue-500
+                                     focus:bg-white
+                                     focus:ring-1
+                                     focus:ring-blue-500"></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="mt-1 block text-sm text-red-600">
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="flex flex-col-reverse gap-3
+                        border-t border-slate-200
+                        bg-slate-50 px-6 py-4
+                        sm:flex-row sm:justify-end">
+
+                <a asp-controller="Message"
+                   asp-action="MailDetail"
+                   asp-route-id="@Model.MessageId"
+                   class="inline-flex items-center justify-center
+                          rounded-lg border border-slate-200
+                          bg-white px-5 py-2.5
+                          text-sm font-semibold text-slate-700
+                          transition hover:bg-slate-100">
+
+                    Vazgeç
+
+                </a>
+
+                <button type="submit"
+                        class="inline-flex items-center justify-center
+                               gap-2 rounded-lg
+                               bg-red-600 px-5 py-2.5
+                               text-sm font-semibold text-white
+                               shadow-sm transition
+                               hover:bg-red-700
+                               focus:outline-none
+                               focus:ring-2 focus:ring-red-500
+                               focus:ring-offset-2">
+
+                    <span class="material-symbols-outlined text-[19px]">
+                        report
+                    </span>
+
+                    Şikâyeti Gönder
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <p class="text-center text-xs leading-5 text-slate-400">
+        Kötüye kullanılan şikâyetler sistem yöneticisi tarafından değerlendirilebilir.
+    </p>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const description =
+                document.getElementById("reportDescription");
+
+            const counter =
+                document.getElementById("descriptionCount");
+
+            if (!description || !counter) {
+                return;
+            }
+
+            function updateCounter() {
+                counter.textContent =
+                    description.value.length + " / 500";
+            }
+
+            description.addEventListener("input", updateCounter);
+
+            updateCounter();
+        });
+    </script>
+}

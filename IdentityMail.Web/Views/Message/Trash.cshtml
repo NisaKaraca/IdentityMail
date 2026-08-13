@@ -1,0 +1,207 @@
+﻿@using IdentityMail.Web.Entities
+@model List<UserMessage>
+
+@{
+    ViewData["Title"] = "Çöp Kutusu";
+    Layout = "~/Views/MailLayout/Index.cshtml";
+
+    var currentUserId = (int)ViewBag.CurrentUserId;
+}
+
+<div class="flex h-full flex-col">
+
+    <div class="mb-4 flex items-center justify-between
+                rounded-xl border border-slate-200
+                bg-white px-5 py-4 shadow-sm">
+
+        <div>
+
+            <h1 class="text-xl font-bold text-slate-900">
+                Çöp Kutusu
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Sildiğiniz mesajları geri yükleyebilir veya kalıcı olarak silebilirsiniz.
+            </p>
+
+        </div>
+
+        <span class="rounded-full bg-red-50
+                     px-3 py-1 text-sm font-semibold
+                     text-red-600">
+
+            @Model.Count mesaj
+
+        </span>
+
+    </div>
+
+    <div class="flex min-h-0 flex-1 flex-col
+                overflow-hidden rounded-xl
+                border border-slate-200
+                bg-white shadow-sm">
+
+        <div class="flex-1 overflow-y-auto">
+
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    var isReceivedMessage =
+                    item.ReceiverId == currentUserId;
+
+                    var otherUser = isReceivedMessage
+                    ? item.Sender
+                    : item.Receiver;
+
+                    var fullName = otherUser != null
+                    ? $"{otherUser.FirstName} {otherUser.LastName}"
+                    : "Bilinmeyen Kullanıcı";
+
+                    var firstInitial =
+                    !string.IsNullOrWhiteSpace(otherUser?.FirstName)
+                    ? otherUser.FirstName.Substring(0, 1)
+                    : "";
+
+                    var lastInitial =
+                    !string.IsNullOrWhiteSpace(otherUser?.LastName)
+                    ? otherUser.LastName.Substring(0, 1)
+                    : "";
+
+                    var initials =
+                    $"{firstInitial}{lastInitial}".ToUpper();
+
+                    if (string.IsNullOrWhiteSpace(initials))
+                    {
+                        initials = "?";
+                    }
+
+                <div class="flex items-center gap-3
+                                    border-b border-slate-100
+                                    px-4 py-4 transition
+                                    hover:bg-slate-50">
+
+                    <div class="flex h-10 w-10 shrink-0
+                                        items-center justify-center
+                                        rounded-full bg-slate-100
+                                        font-semibold text-slate-600">
+
+                        @initials
+
+                    </div>
+
+                    <div class="w-48 shrink-0 min-w-0">
+
+                        <p class="truncate font-semibold text-slate-800">
+                            @fullName
+                        </p>
+
+                        <p class="text-xs text-slate-500">
+                            @(isReceivedMessage
+                                                    ? "Gelen mesaj"
+                                                    : "Gönderilen mesaj")
+                    </p>
+
+                        </div>
+
+                        <div class="min-w-0 flex-1 truncate">
+
+                            <span class="font-semibold text-slate-800">
+                                @item.Subject
+                            </span>
+
+                            <span class="text-slate-500">
+                                − @item.Body
+                            </span>
+
+                        </div>
+
+                        <span class="shrink-0 text-sm text-slate-500">
+                            @item.SendTime.ToString("dd.MM.yyyy")
+                        </span>
+
+                        <form method="post"
+                              action="/Message/RestoreMessage/">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@item.Id" />
+
+                            <button type="submit"
+                                    title="Geri yükle"
+                                    class="flex h-9 w-9 items-center
+                                                   justify-center rounded-lg
+                                                   text-blue-600 transition
+                                                   hover:bg-blue-50">
+
+                                <span class="material-symbols-outlined">
+                                    restore_from_trash
+                                </span>
+
+                            </button>
+
+                        </form>
+
+                        <form method="post"
+                              action="/Message/PermanentlyDelete/">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@item.Id" />
+
+                            <button type="submit"
+                                    title="Kalıcı olarak sil"
+                                    onclick="return confirm('Bu mesaj kalıcı olarak silinsin mi? Bu işlem geri alınamaz.');"
+                                    class="flex h-9 w-9 items-center
+                                                   justify-center rounded-lg
+                                                   text-red-600 transition
+                                                   hover:bg-red-50">
+
+                                <span class="material-symbols-outlined">
+                                    delete_forever
+                                </span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+                        }
+            }
+            else
+            {
+                <div class="flex min-h-80 flex-col
+                                items-center justify-center
+                                px-6 py-16 text-center">
+
+                    <div class="mb-4 flex h-16 w-16
+                                    items-center justify-center
+                                    rounded-full bg-slate-100">
+
+                        <span class="material-symbols-outlined
+                                         text-3xl text-slate-500">
+                            delete
+                        </span>
+
+                    </div>
+
+                    <h2 class="text-lg font-semibold text-slate-800">
+                        Çöp kutunuz boş
+                    </h2>
+
+                    <p class="mt-2 text-sm text-slate-500">
+                        Çöp kutusuna taşıdığınız mesajlar burada görüntülenir.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

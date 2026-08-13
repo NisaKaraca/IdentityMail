@@ -1,0 +1,371 @@
+﻿@using IdentityMail.Web.DTOs.UserMessageDtos
+@model SendMailDto
+
+@{
+    ViewData["Title"] = "Yeni Mesaj";
+    Layout = "~/Views/MailLayout/Index.cshtml";
+}
+
+<div class="mx-auto flex w-full max-w-5xl flex-col gap-6">
+
+    <div class="flex flex-wrap items-center justify-between
+                gap-4 border-b border-slate-200 pb-4">
+
+        <div class="flex items-center gap-3">
+
+            <a href="/Message/Index/"
+               title="Gelen kutusuna dön"
+               class="flex h-10 w-10 items-center justify-center
+                      rounded-full text-slate-500
+                      transition hover:bg-slate-100
+                      hover:text-blue-600">
+
+                <span class="material-symbols-outlined">
+                    arrow_back
+                </span>
+
+            </a>
+
+            <div>
+
+                <h1 class="text-2xl font-bold text-slate-900">
+                    Yeni Mesaj
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    Yeni bir e-posta oluşturun ve gönderin.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <form method="post"
+          action="/Message/SendMail/"
+          class="overflow-hidden rounded-xl
+             border border-slate-200
+             bg-white shadow-sm">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               name="DraftId"
+               value="@(Model?.DraftId)" />
+
+        <div class="border-b border-slate-200
+                    bg-slate-50 px-6 py-4">
+
+            <div class="flex items-center gap-3">
+
+                <div class="flex h-10 w-10 items-center
+                            justify-center rounded-lg bg-blue-100
+                            text-blue-600">
+
+                    <span class="material-symbols-outlined">
+                        edit
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <h2 class="font-semibold text-slate-900">
+                        Mesaj Oluştur
+                    </h2>
+
+                    <p class="text-sm text-slate-500">
+                        Alıcı ve mesaj bilgilerini giriniz.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="space-y-6 p-6">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="rounded-lg border border-red-200
+                        bg-red-50 px-4 py-3
+                        text-sm text-red-600">
+            </div>
+
+            <div>
+
+                <label asp-for="ReceiverMail"
+                       class="mb-2 block text-sm
+                              font-semibold text-slate-700">
+
+                    Alıcı e-posta adresi
+
+                </label>
+
+                <div class="relative">
+
+                    <span class="material-symbols-outlined
+                                 absolute left-3 top-1/2
+                                 -translate-y-1/2
+                                 text-slate-400">
+                        alternate_email
+                    </span>
+
+                    <input asp-for="ReceiverMail"
+                           type="email"
+                           placeholder="ornek@identitymail.com"
+                           autocomplete="email"
+                           class="w-full rounded-lg
+                                  border border-slate-200
+                                  bg-white py-3 pl-11 pr-4
+                                  text-sm text-slate-800
+                                  outline-none transition
+                                  placeholder:text-slate-400
+                                  focus:border-blue-500
+                                  focus:ring-1
+                                  focus:ring-blue-500" />
+
+                </div>
+
+                <span asp-validation-for="ReceiverMail"
+                      class="mt-1 block text-sm text-red-600">
+                </span>
+
+            </div>
+
+            <div>
+
+                <label asp-for="Subject"
+                       class="mb-2 block text-sm
+                              font-semibold text-slate-700">
+
+                    Konu
+
+                </label>
+
+                <div class="relative">
+
+                    <span class="material-symbols-outlined
+                                 absolute left-3 top-1/2
+                                 -translate-y-1/2
+                                 text-slate-400">
+                        subject
+                    </span>
+
+                    <input asp-for="Subject"
+                           type="text"
+                           placeholder="Mesaj konusunu yazınız"
+                           class="w-full rounded-lg
+                                  border border-slate-200
+                                  bg-white py-3 pl-11 pr-4
+                                  text-sm text-slate-800
+                                  outline-none transition
+                                  placeholder:text-slate-400
+                                  focus:border-blue-500
+                                  focus:ring-1
+                                  focus:ring-blue-500" />
+
+                </div>
+
+                <span asp-validation-for="Subject"
+                      class="mt-1 block text-sm text-red-600">
+                </span>
+
+            </div>
+
+            <div>
+
+                <label asp-for="CategoryId"
+                       class="mb-2 block text-sm font-semibold text-slate-700">
+
+                    Kategori
+
+                    <span class="font-normal text-slate-400">
+                        (İsteğe bağlı)
+                    </span>
+
+                </label>
+
+                <div class="relative">
+
+                    <span class="material-symbols-outlined
+                     pointer-events-none
+                     absolute left-3 top-1/2
+                     -translate-y-1/2
+                     text-slate-400">
+                        category
+                    </span>
+
+                    <select asp-for="CategoryId"
+                            asp-items="ViewBag.Categories"
+                            class="w-full rounded-lg
+                       border border-slate-200
+                       bg-white py-3 pl-11 pr-10
+                       text-sm text-slate-800
+                       outline-none transition
+                       focus:border-blue-500
+                       focus:ring-1 focus:ring-blue-500">
+
+                        <option value="">
+                            Kategori seçilmedi
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <span asp-validation-for="CategoryId"
+                      class="mt-1 block text-sm text-red-600">
+                </span>
+
+                <p class="mt-1 text-xs text-slate-400">
+                    Seçilen kategori yalnızca sizin mesaj düzeninizde kullanılır.
+                </p>
+
+            </div>
+            <div>
+
+                <div class="mb-2 flex items-center justify-between">
+
+                    <label asp-for="Body"
+                           class="block text-sm
+                                  font-semibold text-slate-700">
+
+                        Mesaj içeriği
+
+                    </label>
+
+                    <span id="characterCount"
+                          class="text-xs text-slate-400">
+
+                        0 karakter
+
+                    </span>
+
+                </div>
+
+                <textarea asp-for="Body"
+                          id="messageBody"
+                          rows="12"
+                          placeholder="Mesajınızı buraya yazınız..."
+                          class="w-full resize-y rounded-lg
+                                 border border-slate-200
+                                 bg-white px-4 py-3
+                                 text-sm leading-6 text-slate-800
+                                 outline-none transition
+                                 placeholder:text-slate-400
+                                 focus:border-blue-500
+                                 focus:ring-1
+                                 focus:ring-blue-500"></textarea>
+
+                <span asp-validation-for="Body"
+                      class="mt-1 block text-sm text-red-600">
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="flex flex-col-reverse
+                    items-center justify-between gap-3
+                    border-t border-slate-200
+                    bg-slate-50 px-6 py-4
+                    sm:flex-row">
+
+            <a href="/Message/Index/"
+               class="flex w-full items-center
+                      justify-center gap-2 rounded-lg
+                      border border-slate-200
+                      bg-white px-5 py-2.5
+                      text-sm font-semibold text-slate-700
+                      transition hover:bg-slate-100
+                      sm:w-auto">
+
+                <span class="material-symbols-outlined text-[19px]">
+                    close
+                </span>
+
+                <span>Vazgeç</span>
+
+            </a>
+            <button type="submit"
+                    formaction="/Message/SaveDraft/"
+                    formmethod="post"
+                    formnovalidate
+                    class="flex w-full items-center
+               justify-center gap-2 rounded-lg
+               border border-slate-300
+               bg-white px-5 py-2.5
+               text-sm font-semibold text-slate-700
+               transition hover:bg-slate-100
+               sm:w-auto">
+
+                <span class="material-symbols-outlined text-[19px]">
+                    draft
+                </span>
+
+                <span>Taslak Kaydet</span>
+
+            </button>
+            <button type="submit"
+                    class="flex w-full items-center
+                           justify-center gap-2 rounded-lg
+                           bg-blue-600 px-6 py-2.5
+                           text-sm font-semibold text-white
+                           shadow-sm transition
+                           hover:bg-blue-700
+                           focus:outline-none
+                           focus:ring-2 focus:ring-blue-500
+                           focus:ring-offset-2
+                           sm:w-auto">
+
+                <span class="material-symbols-outlined text-[19px]">
+                    send
+                </span>
+
+                <span>Mesajı Gönder</span>
+
+            </button>
+
+
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const messageBody =
+                document.getElementById("messageBody");
+
+            const characterCount =
+                document.getElementById("characterCount");
+
+            if (!messageBody || !characterCount) {
+                return;
+            }
+
+            function updateCharacterCount() {
+                characterCount.textContent =
+                    messageBody.value.length + " karakter";
+            }
+
+            messageBody.addEventListener(
+                "input",
+                updateCharacterCount
+            );
+
+            updateCharacterCount();
+
+        });
+    </script>
+
+}

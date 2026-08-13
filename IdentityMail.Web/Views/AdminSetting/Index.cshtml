@@ -1,0 +1,224 @@
+﻿@model IdentityMail.Web.DTOs.AdminSettingDtos.AdminSettingsDto
+
+@{
+    ViewData["Title"] = "Ayarlar";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="mb-lg">
+
+    <h1 class="text-3xl font-bold text-on-surface">
+        Ayarlar
+    </h1>
+
+    <p class="mt-xs text-sm text-on-surface-variant">
+        Yönetici profilinizi ve güvenlik bilgilerinizi düzenleyin.
+    </p>
+
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="mb-lg rounded-lg border border-green-200
+                    bg-green-50 px-md py-sm text-green-700">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly"
+     class="mb-md text-sm text-error">
+</div>
+
+<div class="grid grid-cols-1 gap-lg xl:grid-cols-2">
+
+    <section class="overflow-hidden rounded-xl
+                    border border-surface-variant
+                    bg-surface shadow-sm">
+
+        <div class="border-b border-surface-variant p-lg">
+
+            <h2 class="text-lg font-semibold text-on-surface">
+                Profil Bilgileri
+            </h2>
+
+        </div>
+
+        <form asp-controller="AdminSetting"
+              asp-action="UpdateProfile"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div class="flex flex-col gap-md p-lg">
+
+                <div>
+                    <label asp-for="Profile.FirstName"
+                           class="mb-xs block text-sm font-semibold">
+                        Ad
+                    </label>
+
+                    <input asp-for="Profile.FirstName"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+
+                    <span asp-validation-for="Profile.FirstName"
+                          class="text-xs text-error"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Profile.LastName"
+                           class="mb-xs block text-sm font-semibold">
+                        Soyad
+                    </label>
+
+                    <input asp-for="Profile.LastName"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+
+                    <span asp-validation-for="Profile.LastName"
+                          class="text-xs text-error"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Profile.UserName"
+                           class="mb-xs block text-sm font-semibold">
+                        Kullanıcı Adı
+                    </label>
+
+                    <input asp-for="Profile.UserName"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+
+                    <span asp-validation-for="Profile.UserName"
+                          class="text-xs text-error"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Profile.Email"
+                           class="mb-xs block text-sm font-semibold">
+                        E-posta
+                    </label>
+
+                    <input asp-for="Profile.Email"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+
+                    <span asp-validation-for="Profile.Email"
+                          class="text-xs text-error"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Profile.ProfileImageUrl"
+                           class="mb-xs block text-sm font-semibold">
+                        Profil Fotoğrafı URL
+                    </label>
+
+                    <input asp-for="Profile.ProfileImageUrl"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+                </div>
+
+            </div>
+
+            <div class="flex justify-end
+                        bg-surface-container-low p-lg">
+
+                <button type="submit"
+                        class="rounded-lg bg-primary
+                               px-md py-sm text-sm font-semibold
+                               text-on-primary">
+                    Profili Güncelle
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <section class="overflow-hidden rounded-xl
+                    border border-surface-variant
+                    bg-surface shadow-sm">
+
+        <div class="border-b border-surface-variant p-lg">
+
+            <h2 class="text-lg font-semibold text-on-surface">
+                Şifre Değiştir
+            </h2>
+
+        </div>
+
+        <form asp-controller="AdminSetting"
+              asp-action="ChangePassword"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div class="flex flex-col gap-md p-lg">
+
+                <div>
+                    <label asp-for="Password.CurrentPassword"
+                           class="mb-xs block text-sm font-semibold">
+                        Mevcut Şifre
+                    </label>
+
+                    <input asp-for="Password.CurrentPassword"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+
+                    <span asp-validation-for="Password.CurrentPassword"
+                          class="text-xs text-error"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password.NewPassword"
+                           class="mb-xs block text-sm font-semibold">
+                        Yeni Şifre
+                    </label>
+
+                    <input asp-for="Password.NewPassword"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+
+                    <span asp-validation-for="Password.NewPassword"
+                          class="text-xs text-error"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password.ConfirmNewPassword"
+                           class="mb-xs block text-sm font-semibold">
+                        Yeni Şifre Tekrar
+                    </label>
+
+                    <input asp-for="Password.ConfirmNewPassword"
+                           class="w-full rounded-lg
+                                  border border-surface-variant" />
+
+                    <span asp-validation-for="Password.ConfirmNewPassword"
+                          class="text-xs text-error"></span>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end
+                        bg-surface-container-low p-lg">
+
+                <button type="submit"
+                        class="rounded-lg bg-primary
+                               px-md py-sm text-sm font-semibold
+                               text-on-primary">
+                    Şifreyi Değiştir
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

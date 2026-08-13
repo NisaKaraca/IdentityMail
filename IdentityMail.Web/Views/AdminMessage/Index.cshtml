@@ -1,0 +1,286 @@
+﻿@model List<IdentityMail.Web.DTOs.AdminMessageDtos.AdminMessageListDto>
+
+@{
+    ViewData["Title"] = "Mesajlar";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="mb-lg flex flex-col gap-md
+            md:flex-row md:items-end md:justify-between">
+
+    <div>
+        <h1 class="text-3xl font-bold text-on-surface">
+            Mesajlar
+        </h1>
+
+        <p class="mt-xs text-sm text-on-surface-variant">
+            Sistem genelindeki mesaj hareketlerini görüntüleyin.
+        </p>
+    </div>
+
+    <div class="rounded-lg border border-surface-variant
+                bg-surface px-md py-sm">
+
+        <span class="text-sm text-on-surface-variant">
+            Görüntülenen:
+        </span>
+
+        <strong class="ml-xs text-primary">
+            @Model.Count
+        </strong>
+    </div>
+
+</div>
+
+<section class="overflow-hidden rounded-xl
+                border border-surface-variant
+                bg-surface shadow-sm">
+
+    <div class="border-b border-surface-variant p-lg">
+
+        <form method="get"
+              asp-controller="AdminMessage"
+              asp-action="Index"
+              class="flex flex-col gap-sm md:flex-row">
+
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.Search"
+                   placeholder="Konu, gönderen veya alıcı ara..."
+                   class="min-w-0 flex-1 rounded-lg
+                          border border-surface-variant
+                          bg-surface px-md py-sm
+                          text-sm focus:border-primary
+                          focus:ring-primary" />
+
+            <select name="status"
+                    class="rounded-lg
+                           border border-surface-variant
+                           bg-surface px-md py-sm text-sm">
+
+                <option value="">Tüm mesajlar</option>
+
+                <option value="unread"
+                        selected="@(ViewBag.Status == "unread")">
+                    Okunmamış
+                </option>
+
+                <option value="read"
+                        selected="@(ViewBag.Status == "read")">
+                    Okunmuş
+                </option>
+
+                <option value="important"
+                        selected="@(ViewBag.Status == "important")">
+                    Önemli
+                </option>
+
+                <option value="reported"
+                        selected="@(ViewBag.Status == "reported")">
+                    Şikâyet edilmiş
+                </option>
+
+                <option value="trash"
+                        selected="@(ViewBag.Status == "trash")">
+                    Çöp kutusunda
+                </option>
+
+            </select>
+
+            <button type="submit"
+                    class="rounded-lg bg-primary
+                           px-md py-sm text-sm font-semibold
+                           text-on-primary">
+
+                Filtrele
+
+            </button>
+
+        </form>
+
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="overflow-x-auto">
+
+            <table class="w-full min-w-[1050px]">
+
+                <thead class="bg-surface-container-low">
+
+                    <tr class="text-left text-xs font-semibold uppercase
+                                   tracking-wider text-on-surface-variant">
+
+                        <th class="px-lg py-md">Konu</th>
+                        <th class="px-lg py-md">Gönderen</th>
+                        <th class="px-lg py-md">Alıcı</th>
+                        <th class="px-lg py-md">Tarih</th>
+                        <th class="px-lg py-md">Durum</th>
+                        <th class="px-lg py-md">Şikâyet</th>
+                        <th class="px-lg py-md text-right">İşlem</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-surface-variant">
+
+                    @foreach (var message in Model)
+                    {
+                        <tr class="hover:bg-surface-container-low/60">
+
+                            <td class="px-lg py-md">
+
+                                <div class="flex items-center gap-xs">
+
+                                    @if (message.IsImportant)
+                                    {
+                                        <span class="material-symbols-outlined
+                                                                 text-yellow-500">
+                                            star
+                                        </span>
+                                    }
+
+                                <span class="max-w-[240px] truncate
+                                                     font-semibold text-on-surface">
+                                    @message.Subject
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                        <td class="px-lg py-md">
+
+                            <p class="text-sm font-medium">
+                                @message.SenderFullName
+                            </p>
+
+                            <p class="text-xs text-on-surface-variant">
+                                @message.SenderEmail
+                            </p>
+
+                        </td>
+
+                        <td class="px-lg py-md">
+
+                            <p class="text-sm font-medium">
+                                @message.ReceiverFullName
+                            </p>
+
+                            <p class="text-xs text-on-surface-variant">
+                                @message.ReceiverEmail
+                            </p>
+
+                        </td>
+
+                        <td class="px-lg py-md text-sm
+                                           text-on-surface-variant">
+
+                            @message.SendTime.ToString("dd.MM.yyyy HH:mm")
+
+                        </td>
+
+                        <td class="px-lg py-md">
+
+                            <div class="flex flex-wrap gap-xs">
+
+                                <span class="rounded-full px-sm py-1
+                                                     text-xs font-semibold
+                                                     @(message.IsRead
+                                                                                           ? "bg-green-100 text-green-700"
+                                                                                           : "bg-blue-100 text-blue-700")">
+
+                                    @(message.IsRead
+                                                                    ? "Okundu"
+                                                                    : "Okunmadı")
+
+                            </span>
+
+                            @if (message.IsInTrash)
+                                    {
+                                        <span class="rounded-full
+                                                                 bg-gray-100 px-sm py-1
+                                                                 text-xs font-semibold
+                                                                 text-gray-600">
+                                            Çöpte
+                                        </span>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                            <td class="px-lg py-md">
+
+                                @if (message.ReportCount > 0)
+                                {
+                                    <span class="rounded-full
+                                                             bg-red-100 px-sm py-1
+                                                             text-xs font-semibold
+                                                             text-red-700">
+
+                                        @message.ReportCount şikâyet
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-sm
+                                                             text-on-surface-variant">
+                                        Yok
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td class="px-lg py-md text-right">
+
+                                <a asp-controller="AdminMessage"
+                                   asp-action="Detail"
+                                   asp-route-id="@message.Id"
+                                   class="inline-flex items-center gap-xs
+                                                  rounded-lg border
+                                                  border-surface-variant
+                                                  px-sm py-xs text-sm font-semibold
+                                                  text-primary
+                                                  hover:bg-primary-fixed">
+
+                                    <span class="material-symbols-outlined
+                                                         text-lg">
+                                        visibility
+                                    </span>
+
+                                    İncele
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="flex min-h-[320px] flex-col
+                        items-center justify-center text-center">
+
+            <span class="material-symbols-outlined
+                             text-6xl text-outline">
+                mail
+            </span>
+
+            <p class="mt-sm text-on-surface-variant">
+                Filtreye uygun mesaj bulunamadı.
+            </p>
+
+        </div>
+    }
+
+</section>

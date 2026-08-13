@@ -1,0 +1,207 @@
+﻿@using IdentityMail.Web.Entities
+@model List<MailDraft>
+
+@{
+    ViewData["Title"] = "Taslaklar";
+    Layout = "~/Views/MailLayout/Index.cshtml";
+}
+
+<div class="flex h-full flex-col">
+
+    <div class="mb-4 flex flex-wrap items-center
+                justify-between gap-4 rounded-xl
+                border border-slate-200 bg-white
+                px-5 py-4 shadow-sm">
+
+        <div class="flex items-center gap-3">
+
+            <div class="flex h-11 w-11 items-center
+                        justify-center rounded-lg
+                        bg-orange-50 text-orange-600">
+
+                <span class="material-symbols-outlined">
+                    draft
+                </span>
+
+            </div>
+
+            <div>
+
+                <h1 class="text-xl font-bold text-slate-900">
+                    Taslaklar
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    Henüz göndermediğiniz mesajları yönetin.
+                </p>
+
+            </div>
+
+        </div>
+
+        <a href="/Message/SendMail/"
+           class="flex items-center gap-2 rounded-lg
+                  bg-blue-600 px-4 py-2.5
+                  text-sm font-semibold text-white
+                  transition hover:bg-blue-700">
+
+            <span class="material-symbols-outlined text-[19px]">
+                edit
+            </span>
+
+            <span>Yeni Mesaj</span>
+
+        </a>
+
+    </div>
+
+    <div class="flex min-h-0 flex-1 flex-col
+                overflow-hidden rounded-xl
+                border border-slate-200 bg-white
+                shadow-sm">
+
+        <div class="flex-1 overflow-y-auto">
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="flex items-center gap-4
+                                        border-b border-slate-100
+                                        px-5 py-4 transition
+                                        hover:bg-slate-50">
+
+                        <div class="flex h-10 w-10 shrink-0
+                                            items-center justify-center
+                                            rounded-full bg-orange-100
+                                            text-orange-600">
+
+                            <span class="material-symbols-outlined">
+                                draft
+                            </span>
+
+                        </div>
+
+                        <a href="/Message/EditDraft/@item.Id"
+                           class="flex min-w-0 flex-1
+                                          items-center gap-4">
+
+                            <div class="w-52 shrink-0 min-w-0">
+
+                                <p class="truncate font-semibold
+                                                  text-slate-800">
+
+                                    @(string.IsNullOrWhiteSpace(
+                                                                item.ReceiverMail)
+                                                                ? "Alıcı belirtilmemiş"
+                                                                : item.ReceiverMail)
+
+                                </p>
+
+                                <p class="text-xs text-orange-600">
+                                    Taslak
+                                </p>
+
+                            </div>
+
+                            <div class="min-w-0 flex-1 truncate">
+
+                                <span class="font-semibold text-slate-800">
+
+                                    @(string.IsNullOrWhiteSpace(item.Subject)
+                                                                ? "Konu belirtilmemiş"
+                                                                : item.Subject)
+
+                                </span>
+
+                                <span class="text-slate-500">
+                                    −
+                                    @(string.IsNullOrWhiteSpace(item.Body)
+                                                                ? "Mesaj içeriği bulunmuyor."
+                                                                : item.Body)
+                        </span>
+
+                                                    </div>
+
+                                                    <span class="shrink-0 text-sm text-slate-500">
+                                                        @item.UpdatedDate.ToString(
+                                                        "dd.MM.yyyy HH:mm"
+                                                        )
+                    </span>
+
+                        </a>
+
+                        <form method="post"
+                              action="/Message/DeleteDraft/">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@item.Id" />
+
+                            <button type="submit"
+                                    title="Taslağı sil"
+                                    onclick="return confirm('Bu taslak silinsin mi?');"
+                                    class="flex h-9 w-9 items-center
+                                                   justify-center rounded-lg
+                                                   text-slate-400 transition
+                                                   hover:bg-red-50
+                                                   hover:text-red-600">
+
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+                        }
+            }
+            else
+            {
+                <div class="flex min-h-80 flex-col
+                                items-center justify-center
+                                px-6 py-16 text-center">
+
+                    <div class="mb-4 flex h-16 w-16
+                                    items-center justify-center
+                                    rounded-full bg-orange-50">
+
+                        <span class="material-symbols-outlined
+                                         text-3xl text-orange-500">
+                            draft
+                        </span>
+
+                    </div>
+
+                    <h2 class="text-lg font-semibold text-slate-800">
+                        Kaydedilmiş taslağınız yok
+                    </h2>
+
+                    <p class="mt-2 text-sm text-slate-500">
+                        Göndermeye hazır olmadığınız mesajları
+                        taslak olarak kaydedebilirsiniz.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="border-t border-slate-200 px-4 py-3">
+
+                <p class="text-sm text-slate-500">
+                    Toplam @Model.Count taslak
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

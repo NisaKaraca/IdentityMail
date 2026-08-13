@@ -1,0 +1,407 @@
+﻿@model IdentityMail.Web.DTOs.AdminCategoryDtos.UpdateCategoryDto
+
+@{
+    ViewData["Title"] = "Kategori Güncelle";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+
+    var selectedIcon = string.IsNullOrWhiteSpace(Model.Icon)
+        ? "label"
+        : Model.Icon;
+
+    var selectedColor = string.IsNullOrWhiteSpace(Model.Color)
+        ? "#004ac6"
+        : Model.Color;
+}
+
+<div class="fixed inset-0 z-50
+            flex items-center justify-center
+            overflow-y-auto
+            bg-black/35 px-md py-xl
+            backdrop-blur-[2px]">
+
+    <div class="w-full max-w-lg overflow-hidden
+                rounded-xl
+                border border-surface-variant
+                bg-surface shadow-2xl">
+
+        <form asp-controller="AdminCategory"
+              asp-action="Update"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="Id" type="hidden" />
+
+            <input asp-for="Icon"
+                   id="selectedIcon"
+                   type="hidden" />
+
+            <input asp-for="Color"
+                   id="selectedColor"
+                   type="hidden" />
+
+            <div class="flex items-center justify-between
+                        border-b border-surface-variant
+                        p-lg">
+
+                <div>
+                    <h1 class="text-lg font-semibold text-on-surface">
+                        Kategori Güncelle
+                    </h1>
+
+                    <p class="mt-1 text-sm text-on-surface-variant">
+                        Kategori bilgilerini ve görünümünü düzenleyin.
+                    </p>
+                </div>
+
+                <a asp-controller="AdminCategory"
+                   asp-action="Index"
+                   title="Pencereyi kapat"
+                   class="flex h-9 w-9 items-center justify-center
+                          rounded-full
+                          text-on-surface-variant
+                          transition-colors
+                          hover:bg-surface-container-low">
+
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+            </div>
+
+            <div class="flex flex-col gap-lg p-lg">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-sm text-error">
+                </div>
+
+                <div class="flex flex-col gap-xs">
+
+                    <label asp-for="Name"
+                           class="text-xs font-semibold uppercase
+                                  tracking-wider text-on-surface-variant">
+
+                        Kategori Adı
+                    </label>
+
+                    <input asp-for="Name"
+                           autocomplete="off"
+                           class="w-full rounded-lg
+                                  border border-surface-variant
+                                  bg-surface-container-low
+                                  px-md py-2.5
+                                  text-sm text-on-surface
+                                  focus:border-primary
+                                  focus:outline-none
+                                  focus:ring-2
+                                  focus:ring-primary/20" />
+
+                    <span asp-validation-for="Name"
+                          class="text-xs text-error">
+                    </span>
+                </div>
+
+                <div class="flex flex-col gap-xs">
+
+                    <label asp-for="Description"
+                           class="text-xs font-semibold uppercase
+                                  tracking-wider text-on-surface-variant">
+
+                        Açıklama
+                    </label>
+
+                    <textarea asp-for="Description"
+                              rows="3"
+                              maxlength="200"
+                              class="w-full resize-none rounded-lg
+                                     border border-surface-variant
+                                     bg-surface-container-low
+                                     px-md py-2.5
+                                     text-sm text-on-surface
+                                     focus:border-primary
+                                     focus:outline-none
+                                     focus:ring-2
+                                     focus:ring-primary/20"></textarea>
+
+                    <div class="flex justify-between">
+
+                        <span asp-validation-for="Description"
+                              class="text-xs text-error">
+                        </span>
+
+                        <span id="descriptionCounter"
+                              class="text-xs text-on-surface-variant">
+                            0 / 200
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-xs">
+
+                    <label class="text-xs font-semibold uppercase
+                                  tracking-wider text-on-surface-variant">
+
+                        Kategori İkonu
+                    </label>
+
+                    <div class="grid grid-cols-5 gap-sm">
+
+                        @{
+                            var icons = new[]
+                            {
+                                                new { Value = "work", Label = "İş" },
+                                                new { Value = "school", Label = "Eğitim" },
+                                                new { Value = "person", Label = "Kişisel" },
+                                                new { Value = "folder", Label = "Klasör" },
+                                                new { Value = "business", Label = "Kurumsal" },
+                                                new { Value = "payments", Label = "Finans" },
+                                                new { Value = "shopping_cart", Label = "Alışveriş" },
+                                                new { Value = "travel", Label = "Seyahat" },
+                                                new { Value = "favorite", Label = "Özel" },
+                                                new { Value = "label", Label = "Diğer" }
+                                                };
+                        }
+
+                        @foreach (var icon in icons)
+                        {
+                            <button type="button"
+                                    data-icon="@icon.Value"
+                                    title="@icon.Label"
+                                    class="icon-option flex items-center
+                                               justify-center rounded-lg
+                                               border p-2.5 transition-colors">
+
+                                <span class="material-symbols-outlined">
+                                    @icon.Value
+                                </span>
+                            </button>
+                        }
+
+                    </div>
+
+                    <span asp-validation-for="Icon"
+                          class="text-xs text-error">
+                    </span>
+                </div>
+
+                <div class="flex flex-col gap-xs">
+
+                    <label class="text-xs font-semibold uppercase
+                                  tracking-wider text-on-surface-variant">
+
+                        Renk Seçin
+                    </label>
+
+                    <div class="flex flex-wrap gap-md">
+
+                        @{
+                            var colors = new[]
+                            {
+                                                "#004ac6",
+                                                "#16a34a",
+                                                "#4f46e5",
+                                                "#ca8a04",
+                                                "#db2777",
+                                                "#737686",
+                                                "#dc2626"
+                                                };
+                        }
+
+                        @foreach (var color in colors)
+                        {
+                            <button type="button"
+                                    data-color="@color"
+                                    title="@color"
+                                    class="color-option h-8 w-8
+                                               rounded-full
+                                               transition-transform
+                                               hover:scale-110"
+                                    style="background-color: @color">
+                            </button>
+                        }
+
+                    </div>
+
+                    <span asp-validation-for="Color"
+                          class="text-xs text-error">
+                    </span>
+                </div>
+
+                <label class="flex cursor-pointer items-center
+                              justify-between rounded-lg
+                              border border-surface-variant
+                              bg-surface-container-low p-sm">
+
+                    <div>
+                        <p class="text-sm font-semibold text-on-surface">
+                            Kategori durumu
+                        </p>
+
+                        <p class="text-xs text-on-surface-variant">
+                            Pasif kategoriler kullanıcı seçimlerinde görünmez.
+                        </p>
+                    </div>
+
+                    <input asp-for="IsActive"
+                           type="checkbox"
+                           class="h-5 w-5 rounded
+                                  border-surface-variant
+                                  text-primary
+                                  focus:ring-primary" />
+                </label>
+
+                <div class="flex items-center gap-sm
+                            rounded-lg
+                            border border-surface-variant
+                            bg-surface-container-low p-sm">
+
+                    <div id="categoryPreview"
+                         class="flex h-10 w-10 items-center
+                                justify-center rounded-full">
+
+                        <span id="previewIcon"
+                              class="material-symbols-outlined">
+                            @selectedIcon
+                        </span>
+                    </div>
+
+                    <div>
+                        <p class="text-xs text-on-surface-variant">
+                            Kategori ön izlemesi
+                        </p>
+
+                        <p id="previewName"
+                           class="text-sm font-semibold text-on-surface">
+                            @Model.Name
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-md
+                        bg-surface-container-low p-lg">
+
+                <a asp-controller="AdminCategory"
+                   asp-action="Index"
+                   class="rounded-lg px-md py-2
+                          text-sm font-semibold
+                          text-on-surface-variant
+                          transition-colors
+                          hover:bg-surface-container-high">
+
+                    Vazgeç
+                </a>
+
+                <button type="submit"
+                        class="rounded-lg
+                               bg-primary-container
+                               px-md py-2
+                               text-sm font-semibold
+                               text-on-primary
+                               shadow-sm transition-opacity
+                               hover:opacity-90">
+
+                    Değişiklikleri Kaydet
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const iconInput = document.getElementById("selectedIcon");
+            const colorInput = document.getElementById("selectedColor");
+            const nameInput = document.getElementById("Name");
+            const descriptionInput = document.getElementById("Description");
+            const descriptionCounter =
+                document.getElementById("descriptionCounter");
+            const previewIcon = document.getElementById("previewIcon");
+            const previewName = document.getElementById("previewName");
+            const categoryPreview =
+                document.getElementById("categoryPreview");
+
+            const iconButtons =
+                document.querySelectorAll(".icon-option");
+            const colorButtons =
+                document.querySelectorAll(".color-option");
+
+            function updateIconSelection() {
+                iconButtons.forEach(function (button) {
+                    const selected =
+                        button.dataset.icon === iconInput.value;
+
+                    button.classList.toggle("border-primary", selected);
+                    button.classList.toggle(
+                        "bg-primary-container/10",
+                        selected);
+                    button.classList.toggle("text-primary", selected);
+                    button.classList.toggle(
+                        "border-surface-variant",
+                        !selected);
+                    button.classList.toggle(
+                        "text-on-surface-variant",
+                        !selected);
+                });
+
+                previewIcon.textContent =
+                    iconInput.value || "label";
+            }
+
+            function updateColorSelection() {
+                colorButtons.forEach(function (button) {
+                    const selected =
+                        button.dataset.color.toLowerCase() ===
+                        colorInput.value.toLowerCase();
+
+                    button.classList.toggle("ring-2", selected);
+                    button.classList.toggle("ring-offset-2", selected);
+                    button.classList.toggle("ring-primary", selected);
+                });
+
+                const color = colorInput.value || "#004ac6";
+
+                categoryPreview.style.backgroundColor = color + "20";
+                previewIcon.style.color = color;
+            }
+
+            function updateNamePreview() {
+                previewName.textContent =
+                    nameInput.value.trim() || "Kategori";
+            }
+
+            function updateCounter() {
+                descriptionCounter.textContent =
+                    descriptionInput.value.length + " / 200";
+            }
+
+            iconButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    iconInput.value = button.dataset.icon;
+                    updateIconSelection();
+                });
+            });
+
+            colorButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    colorInput.value = button.dataset.color;
+                    updateColorSelection();
+                });
+            });
+
+            nameInput.addEventListener("input", updateNamePreview);
+            descriptionInput.addEventListener("input", updateCounter);
+
+            updateIconSelection();
+            updateColorSelection();
+            updateNamePreview();
+            updateCounter();
+        });
+    </script>
+}

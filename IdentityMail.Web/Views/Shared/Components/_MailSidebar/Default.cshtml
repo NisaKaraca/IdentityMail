@@ -1,0 +1,238 @@
+﻿@model int
+<nav class="fixed left-0 top-0 z-50 hidden h-screen w-64
+            flex-col border-r border-slate-200
+            bg-white px-4 py-5 shadow-sm md:flex">
+
+    <div class="mb-6 flex items-center gap-3 px-2">
+
+        <div class="flex h-10 w-10 shrink-0 items-center
+                    justify-center rounded-lg bg-blue-600
+                    shadow-sm">
+
+            <span class="material-symbols-outlined text-white">
+                mail
+            </span>
+
+        </div>
+
+        <div class="min-w-0">
+
+            <h1 class="truncate text-lg font-bold text-blue-600">
+                IdentityMail
+            </h1>
+
+            <p class="text-xs text-slate-500">
+                Kurumsal İletişim
+            </p>
+
+        </div>
+
+    </div>
+
+    <a href="/Message/SendMail/"
+       class="mb-6 flex w-full items-center justify-center
+              gap-2 rounded-lg bg-blue-600
+              px-4 py-3 text-sm font-semibold text-white
+              shadow-sm transition hover:bg-blue-700">
+
+        <span class="material-symbols-outlined text-[20px]">
+            edit
+        </span>
+
+        <span>Yeni Mesaj</span>
+
+    </a>
+
+    <ul class="flex-1 space-y-1 overflow-y-auto">
+
+        <li>
+
+            <a href="/Message/Index/"
+               class="flex items-center gap-3 rounded-lg
+              border-l-4 border-blue-600
+              bg-blue-50 px-3 py-2.5
+              text-blue-700 transition
+              hover:bg-blue-100">
+
+                <span class="material-symbols-outlined">
+                    inbox
+                </span>
+
+                <span class="flex-1 text-sm font-semibold">
+                    Gelen Kutusu
+                </span>
+
+                @if (Model > 0)
+                {
+                    <span class="flex min-w-6 items-center
+                             justify-center rounded-full
+                             bg-blue-600 px-2 py-0.5
+                             text-xs font-bold text-white">
+
+                        @Model
+
+                    </span>
+                }
+
+            </a>
+
+
+        </li>
+
+        <li>
+
+            <a href="/Message/Sent/"
+               class="flex items-center gap-3 rounded-lg
+          px-3 py-2.5 text-slate-600
+          transition hover:bg-slate-100
+          hover:text-blue-600">
+
+                <span class="material-symbols-outlined">
+                    send
+                </span>
+
+                <span class="text-sm font-medium">
+                    Gönderilenler
+                </span>
+
+            </a>
+        </li>
+
+        <li>
+
+            <a href="/Message/Drafts/"
+               class="flex items-center gap-3 rounded-lg
+                      px-3 py-2.5 text-slate-600
+                      transition hover:bg-slate-100
+                      hover:text-blue-600">
+
+                <span class="material-symbols-outlined">
+                    draft
+                </span>
+
+                <span class="text-sm font-medium">
+                    Taslaklar
+                </span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/Message/Important/"
+               class="flex items-center gap-3 rounded-lg
+          px-3 py-2.5 text-slate-600
+          transition hover:bg-slate-100
+          hover:text-amber-500">
+
+                <span class="material-symbols-outlined">
+                    star
+                </span>
+
+                <span class="text-sm font-medium">
+                    Önemli
+                </span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/Message/Trash/"
+               class="flex items-center gap-3 rounded-lg
+                      px-3 py-2.5 text-slate-600
+                      transition hover:bg-slate-100
+                      hover:text-blue-600">
+
+                <span class="material-symbols-outlined">
+                    delete
+                </span>
+
+                <span class="text-sm font-medium">
+                    Çöp Kutusu
+                </span>
+
+            </a>
+
+        </li>
+
+        <li class="mt-4 border-t border-slate-200 pt-4">
+
+            <p class="mb-2 px-3 text-xs font-semibold
+                      uppercase tracking-wider text-slate-400">
+                Kategoriler
+            </p>
+
+            <a href="#"
+               class="flex items-center gap-3 rounded-lg
+                      px-3 py-2.5 text-slate-600
+                      transition hover:bg-slate-100">
+
+                <span class="material-symbols-outlined text-blue-500">
+                    folder
+                </span>
+
+                <span class="text-sm font-medium">
+                    İş
+                </span>
+
+            </a>
+
+            <a href="#"
+               class="flex items-center gap-3 rounded-lg
+                      px-3 py-2.5 text-slate-600
+                      transition hover:bg-slate-100">
+
+                <span class="material-symbols-outlined text-orange-500">
+                    folder
+                </span>
+
+                <span class="text-sm font-medium">
+                    Eğitim
+                </span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <div class="mt-auto space-y-1 border-t
+                border-slate-200 pt-4">
+
+        <a href="/Settings/Index/"
+           class="flex items-center gap-3 rounded-lg
+          px-3 py-2.5 text-slate-600
+          transition hover:bg-slate-100
+          hover:text-blue-600">
+
+            <span class="material-symbols-outlined">
+                settings
+            </span>
+
+            <span class="text-sm font-medium">
+                Ayarlar
+            </span>
+
+        </a>
+
+        <a href="/Auth/Logout/"
+           class="flex items-center gap-3 rounded-lg
+                  px-3 py-2.5 text-red-600
+                  transition hover:bg-red-50">
+
+            <span class="material-symbols-outlined">
+                logout
+            </span>
+
+            <span class="text-sm font-medium">
+                Çıkış Yap
+            </span>
+
+        </a>
+
+    </div>
+
+</nav>

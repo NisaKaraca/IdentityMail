@@ -1,0 +1,314 @@
+﻿@model IdentityMail.Web.DTOs.AdminMessageDtos.AdminMessageDetailDto
+
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<section class="mb-lg flex flex-col gap-md
+                sm:flex-row sm:items-center
+                sm:justify-between">
+
+    <div>
+
+        <a asp-controller="AdminMessage"
+           asp-action="Index"
+           class="mb-sm inline-flex items-center gap-xs
+                  text-sm font-semibold text-primary
+                  hover:underline">
+
+            <span class="material-symbols-outlined text-lg">
+                arrow_back
+            </span>
+
+            Mesajlara Dön
+
+        </a>
+
+        <h1 class="text-3xl font-bold text-on-surface">
+            Mesaj Detayı
+        </h1>
+
+        <p class="mt-xs text-sm text-on-surface-variant">
+            Mesajın gönderim ve durum bilgilerini inceleyin.
+        </p>
+
+    </div>
+
+    <div class="flex flex-wrap items-center gap-xs">
+
+        @if (Model.IsImportant)
+        {
+            <span class="inline-flex items-center gap-1
+                             rounded-full bg-yellow-100
+                             px-sm py-1 text-xs font-semibold
+                             text-yellow-700">
+
+                <span class="material-symbols-outlined text-base">
+                    star
+                </span>
+
+                Önemli
+
+            </span>
+        }
+
+        <span class="rounded-full px-sm py-1
+                     text-xs font-semibold
+                     @(Model.IsRead
+                                       ? "bg-green-100 text-green-700"
+                                       : "bg-blue-100 text-blue-700")">
+
+            @(Model.IsRead ? "Okundu" : "Okunmadı")
+
+        </span>
+
+        @if (Model.ReportCount > 0)
+        {
+            <span class="inline-flex items-center gap-1
+                             rounded-full bg-red-100
+                             px-sm py-1 text-xs font-semibold
+                             text-red-700">
+
+                <span class="material-symbols-outlined text-base">
+                    report
+                </span>
+
+                @Model.ReportCount şikâyet
+
+            </span>
+        }
+
+    </div>
+
+</section>
+
+<div class="grid grid-cols-1 gap-lg lg:grid-cols-3">
+
+    <section class="lg:col-span-2 overflow-hidden
+                    rounded-xl border border-surface-variant
+                    bg-surface shadow-sm">
+
+        <div class="border-b border-surface-variant p-lg">
+
+            <div class="mb-md flex items-center gap-sm">
+
+                <span class="material-symbols-outlined text-primary">
+                    mail
+                </span>
+
+                <span class="text-xs font-semibold uppercase
+                             tracking-wider text-on-surface-variant">
+                    Mesaj #@Model.Id
+                </span>
+
+            </div>
+
+            <h2 class="text-2xl font-bold text-on-surface">
+                @Model.Subject
+            </h2>
+
+            <p class="mt-xs text-sm text-on-surface-variant">
+                @Model.SendTime.ToString("dd.MM.yyyy HH:mm")
+            </p>
+
+        </div>
+
+        <div class="min-h-[280px] p-lg">
+
+            <p class="whitespace-pre-wrap break-words
+                      text-base leading-7 text-on-surface">
+                @Model.Body
+            </p>
+
+        </div>
+
+    </section>
+
+    <aside class="flex flex-col gap-lg">
+
+        <section class="rounded-xl
+                        border border-surface-variant
+                        bg-surface p-lg shadow-sm">
+
+            <p class="mb-md text-xs font-semibold uppercase
+                      tracking-wider text-on-surface-variant">
+                Gönderen
+            </p>
+
+            <div class="flex items-center gap-sm">
+
+                @if (!string.IsNullOrWhiteSpace(Model.SenderImageUrl))
+                {
+                    <img src="@Model.SenderImageUrl"
+                         alt="@Model.SenderFullName"
+                         class="h-11 w-11 rounded-full
+                                    border border-surface-variant
+                                    object-cover" />
+                }
+                else
+                {
+                    <div class="flex h-11 w-11 items-center
+                                    justify-center rounded-full
+                                    bg-primary-container
+                                    font-bold text-on-primary">
+
+                        @(string.IsNullOrWhiteSpace(Model.SenderFullName)
+                                            ? "?"
+                                            : Model.SenderFullName[0].ToString().ToUpper())
+
+                </div>
+                                }
+
+                <div class="min-w-0">
+
+                    <p class="truncate font-semibold text-on-surface">
+                        @Model.SenderFullName
+                    </p>
+
+                    <p class="truncate text-sm text-on-surface-variant">
+                        @Model.SenderEmail
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="rounded-xl
+                        border border-surface-variant
+                        bg-surface p-lg shadow-sm">
+
+            <p class="mb-md text-xs font-semibold uppercase
+                      tracking-wider text-on-surface-variant">
+                Alıcı
+            </p>
+
+            <div class="flex items-center gap-sm">
+
+                @if (!string.IsNullOrWhiteSpace(Model.ReceiverImageUrl))
+                {
+                    <img src="@Model.ReceiverImageUrl"
+                         alt="@Model.ReceiverFullName"
+                         class="h-11 w-11 rounded-full
+                                    border border-surface-variant
+                                    object-cover" />
+                }
+                else
+                {
+                    <div class="flex h-11 w-11 items-center
+                                    justify-center rounded-full
+                                    bg-secondary-container
+                                    font-bold text-on-secondary-container">
+
+                        @(string.IsNullOrWhiteSpace(Model.ReceiverFullName)
+                                            ? "?"
+                                            : Model.ReceiverFullName[0].ToString().ToUpper())
+
+                </div>
+                                }
+
+                <div class="min-w-0">
+
+                    <p class="truncate font-semibold text-on-surface">
+                        @Model.ReceiverFullName
+                    </p>
+
+                    <p class="truncate text-sm text-on-surface-variant">
+                        @Model.ReceiverEmail
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="rounded-xl
+                        border border-surface-variant
+                        bg-surface p-lg shadow-sm">
+
+            <h2 class="mb-md text-lg font-semibold text-on-surface">
+                Sistem Durumu
+            </h2>
+
+            <div class="flex flex-col gap-sm text-sm">
+
+                <div class="flex items-center justify-between">
+
+                    <span class="text-on-surface-variant">
+                        Gönderenin çöpünde
+                    </span>
+
+                    <span class="font-semibold
+                                 @(Model.IsTrashedBySender
+                                                               ? "text-red-600"
+                                                               : "text-green-600")">
+
+                        @(Model.IsTrashedBySender ? "Evet" : "Hayır")
+
+                    </span>
+
+                </div>
+
+                <div class="flex items-center justify-between">
+
+                    <span class="text-on-surface-variant">
+                        Alıcının çöpünde
+                    </span>
+
+                    <span class="font-semibold
+                                 @(Model.IsTrashedByReceiver
+                                                               ? "text-red-600"
+                                                               : "text-green-600")">
+
+                        @(Model.IsTrashedByReceiver ? "Evet" : "Hayır")
+
+                    </span>
+
+                </div>
+
+                <div class="flex items-center justify-between">
+
+                    <span class="text-on-surface-variant">
+                        Şikâyet sayısı
+                    </span>
+
+                    <span class="font-semibold
+                                 @(Model.ReportCount > 0
+                                                               ? "text-red-600"
+                                                               : "text-on-surface")">
+
+                        @Model.ReportCount
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            @if (Model.ReportCount > 0)
+            {
+                <a asp-controller="AdminReport"
+                   asp-action="Index"
+                   class="mt-md flex w-full items-center
+                              justify-center gap-xs rounded-lg
+                              bg-red-50 px-md py-sm
+                              text-sm font-semibold text-red-700
+                              hover:bg-red-100">
+
+                    <span class="material-symbols-outlined">
+                        report
+                    </span>
+
+                    Şikâyetleri Gör
+
+                </a>
+            }
+
+        </section>
+
+    </aside>
+
+</div>

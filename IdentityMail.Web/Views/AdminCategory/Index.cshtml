@@ -1,0 +1,354 @@
+﻿@model List<IdentityMail.Web.DTOs.AdminCategoryDtos.ResultCategoryDto>
+
+@{
+    ViewData["Title"] = "Kategoriler";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<section class="mb-lg">
+
+    <div class="flex flex-col gap-md
+                sm:flex-row sm:items-center
+                sm:justify-between">
+
+        <div>
+
+            <h1 class="text-3xl font-bold text-on-background">
+                Kategoriler
+            </h1>
+
+            <p class="mt-1 text-sm text-on-surface-variant">
+                Mesajları düzenlemek için kullanılan kategorileri yönetin.
+            </p>
+
+        </div>
+
+        <a asp-controller="AdminCategory"
+           asp-action="Create"
+           class="flex items-center justify-center gap-sm
+                  whitespace-nowrap rounded-lg
+                  bg-primary-container
+                  px-6 py-2.5
+                  text-sm font-semibold text-on-primary
+                  shadow-sm transition-opacity
+                  hover:opacity-90">
+
+            <span class="material-symbols-outlined">
+                add
+            </span>
+
+            Yeni Kategori Ekle
+
+        </a>
+
+    </div>
+
+</section>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="mb-lg flex items-center gap-sm
+                    rounded-lg border border-green-200
+                    bg-green-50 px-md py-sm
+                    text-sm text-green-700">
+
+        <span class="material-symbols-outlined">
+            check_circle
+        </span>
+
+        <span>
+            @TempData["SuccessMessage"]
+        </span>
+
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="mb-lg flex items-center gap-sm
+                    rounded-lg border border-red-200
+                    bg-red-50 px-md py-sm
+                    text-sm text-red-700">
+
+        <span class="material-symbols-outlined">
+            error
+        </span>
+
+        <span>
+            @TempData["ErrorMessage"]
+        </span>
+
+    </div>
+}
+
+<section class="mb-lg grid grid-cols-1 gap-md sm:grid-cols-3">
+
+    <div class="rounded-xl border border-surface-variant
+                bg-surface p-md shadow-sm">
+
+        <p class="text-sm text-on-surface-variant">
+            Toplam Kategori
+        </p>
+
+        <p class="mt-xs text-2xl font-bold text-primary">
+            @Model.Count
+        </p>
+
+    </div>
+
+    <div class="rounded-xl border border-surface-variant
+                bg-surface p-md shadow-sm">
+
+        <p class="text-sm text-on-surface-variant">
+            Aktif Kategori
+        </p>
+
+        <p class="mt-xs text-2xl font-bold text-green-600">
+            @Model.Count(category => category.IsActive)
+        </p>
+
+    </div>
+
+    <div class="rounded-xl border border-surface-variant
+                bg-surface p-md shadow-sm">
+
+        <p class="text-sm text-on-surface-variant">
+            Toplam Kullanım
+        </p>
+
+        <p class="mt-xs text-2xl font-bold text-on-surface">
+            @Model.Sum(category => category.UsageCount)
+        </p>
+
+    </div>
+
+</section>
+
+@if (Model.Any())
+{
+    <section class="grid grid-cols-1 gap-lg
+                        md:grid-cols-2
+                        lg:grid-cols-3
+                        xl:grid-cols-4">
+
+        @foreach (var category in Model)
+        {
+            var categoryColor = string.IsNullOrWhiteSpace(category.Color)
+            ? "#2563eb"
+            : category.Color;
+
+            var categoryIcon = string.IsNullOrWhiteSpace(category.Icon)
+            ? "label"
+            : category.Icon;
+
+            <article class="group relative flex h-full flex-col
+                                    rounded-xl border border-surface-variant
+                                    bg-surface-container-lowest p-lg
+                                    shadow-sm transition-all
+                                    hover:-translate-y-1 hover:shadow-md
+                                    @(!category.IsActive ? "opacity-75" : "")">
+
+                <div class="mb-md flex items-start justify-between">
+
+                    <div class="flex h-12 w-12
+                                        items-center justify-center
+                                        rounded-full"
+                         style="background-color: @(categoryColor)20;">
+
+                        <span class="material-symbols-outlined text-2xl"
+                              style="color: @categoryColor">
+
+                            @categoryIcon
+
+                        </span>
+
+                    </div>
+
+                    <div class="flex gap-2
+                                        opacity-100 transition-opacity
+                                        md:opacity-0 md:group-hover:opacity-100">
+
+                        <a asp-controller="AdminCategory"
+                           asp-action="Update"
+                           asp-route-id="@category.Id"
+                           title="Kategoriyi güncelle"
+                           class="rounded p-1
+                                          text-on-surface-variant
+                                          transition-colors
+                                          hover:bg-surface-container-low
+                                          hover:text-primary">
+
+                            <span class="material-symbols-outlined text-xl">
+                                edit
+                            </span>
+
+                        </a>
+
+                        <form asp-controller="AdminCategory"
+                              asp-action="ToggleStatus"
+                              asp-route-id="@category.Id"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    title="@(category.IsActive
+                                                                            ? "Kategoriyi pasifleştir"
+                                                                            : "Kategoriyi aktifleştir")"
+                            onclick="return confirm(
+                                        '@(category.IsActive
+                                                                        ? "Bu kategoriyi pasifleştirmek istiyor musunuz?"
+                                                                        : "Bu kategoriyi aktifleştirmek istiyor musunuz?")')"
+                                                                                                                          class="rounded p-1
+                                                                                                                                         text-on-surface-variant
+                                                                                                                                         transition-colors
+                                           @(category.IsActive
+                                                                           ? "hover:bg-error-container hover:text-error"
+                                                                           : "hover:bg-green-50 hover:text-green-600")">
+
+                        <span class="material-symbols-outlined text-xl">
+
+                            @(category.IsActive
+                                                        ? "visibility_off"
+                                                        : "visibility")
+
+                        </span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <h2 class="mb-1 text-lg font-semibold text-on-surface">
+                    @category.Name
+                </h2>
+
+        @if (!string.IsNullOrWhiteSpace(category.Description))
+                {
+                    <p class="mb-auto text-sm
+                                          leading-6 text-on-surface-variant">
+
+                        @category.Description
+
+                    </p>
+                }
+                else
+                {
+                    <p class="mb-auto text-sm italic
+                                          text-on-surface-variant">
+
+                        Açıklama eklenmemiş.
+
+                    </p>
+                }
+
+                <div class="mt-lg flex items-end justify-between
+                                    border-t border-surface-container-highest
+                                    pt-md">
+
+                    <div>
+
+                        <span class="mb-1 block text-xs font-semibold
+                                             uppercase tracking-wider
+                                             text-on-surface-variant">
+
+                            Mesaj Sayısı
+
+                        </span>
+
+                        <span class="text-2xl font-semibold text-on-surface">
+                            @category.UsageCount
+                        </span>
+
+                    </div>
+
+                    @if (category.IsActive)
+                    {
+                        <div class="flex items-center gap-1
+                                                rounded-full
+                                                bg-green-50 px-2 py-1">
+
+                            <span class="h-2 w-2 rounded-full
+                                                     bg-green-500">
+                            </span>
+
+                            <span class="text-xs font-semibold
+                                                     text-green-700">
+                                Aktif
+                            </span>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex items-center gap-1
+                                                rounded-full
+                                                border border-surface-variant
+                                                bg-surface-container-low
+                                                px-2 py-1">
+
+                            <span class="h-2 w-2 rounded-full bg-outline">
+                            </span>
+
+                            <span class="text-xs font-semibold
+                                                     text-on-surface-variant">
+                                Pasif
+                            </span>
+
+                        </div>
+                    }
+
+                </div>
+
+            </article>
+        }
+
+    </section>
+}
+else
+{
+    <section class="flex min-h-[380px]
+                        flex-col items-center justify-center
+                        rounded-xl
+                        border border-dashed border-surface-variant
+                        bg-surface p-xl text-center">
+
+        <div class="mb-md flex h-16 w-16
+                        items-center justify-center
+                        rounded-full bg-primary-fixed">
+
+            <span class="material-symbols-outlined
+                             text-4xl text-primary">
+                category
+            </span>
+
+        </div>
+
+        <h2 class="text-xl font-semibold text-on-surface">
+            Henüz kategori bulunmuyor
+        </h2>
+
+        <p class="mt-xs max-w-md text-sm text-on-surface-variant">
+            Mesajların sınıflandırılabilmesi için ilk kategoriyi oluşturun.
+        </p>
+
+        <a asp-controller="AdminCategory"
+           asp-action="Create"
+           class="mt-lg flex items-center gap-xs
+                      rounded-lg bg-primary
+                      px-md py-sm
+                      text-sm font-semibold text-on-primary">
+
+            <span class="material-symbols-outlined">
+                add
+            </span>
+
+            İlk Kategoriyi Ekle
+
+        </a>
+
+    </section>
+}

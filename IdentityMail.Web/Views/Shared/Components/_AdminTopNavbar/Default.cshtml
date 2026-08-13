@@ -1,0 +1,130 @@
+﻿@model IdentityMail.Web.DTOs.AdminLayoutDtos.AdminNavbarDto
+
+@{
+    var pageTitle = ViewData["Title"]?.ToString() ?? "Admin Paneli";
+}
+
+<header class="md:hidden sticky top-0 z-40
+               flex items-center justify-between
+               h-16 px-md
+               bg-surface
+               border-b border-surface-variant">
+
+    <div>
+        <p class="font-bold text-primary">
+            IdentityMail
+        </p>
+
+        <p class="text-xs text-on-surface-variant">
+            @pageTitle
+        </p>
+    </div>
+
+    <div class="flex items-center gap-md">
+
+        <button type="button"
+                class="text-on-surface-variant">
+
+            <span class="material-symbols-outlined">
+                notifications
+            </span>
+
+        </button>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ProfileImageUrl))
+        {
+            <img src="@Model.ProfileImageUrl"
+                 alt="@Model.FullName"
+                 class="w-9 h-9 rounded-full object-cover
+                            border border-surface-variant" />
+        }
+        else
+        {
+            <div class="w-9 h-9 rounded-full
+                            bg-primary-container text-on-primary
+                            flex items-center justify-center
+                            font-semibold">
+
+                @(string.IsNullOrWhiteSpace(Model.FullName)
+                            ? "A"
+                            : Model.FullName.Substring(0, 1).ToUpper())
+
+        </div>
+                }
+
+    </div>
+
+</header>
+
+<header class="hidden md:flex
+               fixed top-0 right-0 left-sidebar-width
+               h-20 z-20
+               items-center justify-between
+               px-xl
+               bg-surface-container-lowest/95
+               border-b border-surface-variant">
+
+    <div>
+        <h2 class="text-xl font-semibold text-on-surface">
+            @pageTitle
+        </h2>
+
+        <p class="text-sm text-on-surface-variant">
+            IdentityMail yönetim paneli
+        </p>
+    </div>
+
+    <div class="flex items-center gap-md">
+
+        <button type="button"
+                class="p-sm rounded-full
+                       hover:bg-surface-container-low
+                       text-on-surface-variant
+                       transition-colors">
+
+            <span class="material-symbols-outlined">
+                notifications
+            </span>
+
+        </button>
+
+        <div class="flex items-center gap-sm">
+
+            <div class="text-right">
+
+                <p class="text-sm font-semibold text-on-surface">
+                    @Model.FullName
+                </p>
+
+                <p class="text-xs text-on-surface-variant">
+                    Yönetici
+                </p>
+
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ProfileImageUrl))
+            {
+                <img src="@Model.ProfileImageUrl"
+                     alt="@Model.FullName"
+                     class="w-10 h-10 rounded-full object-cover
+                                border border-surface-variant" />
+            }
+            else
+            {
+                <div class="w-10 h-10 rounded-full
+                                bg-primary-container text-on-primary
+                                flex items-center justify-center
+                                font-semibold">
+
+                    @(string.IsNullOrWhiteSpace(Model.FullName)
+                                    ? "A"
+                                    : Model.FullName.Substring(0, 1).ToUpper())
+
+            </div>
+                        }
+
+        </div>
+
+    </div>
+
+</header>

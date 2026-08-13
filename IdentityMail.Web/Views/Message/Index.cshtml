@@ -1,0 +1,381 @@
+﻿@using IdentityMail.Web.Entities
+@model List<UserMessage>
+
+@{
+    ViewData["Title"] = "Gelen Kutusu";
+    Layout = "~/Views/MailLayout/Index.cshtml";
+}
+
+<div class="flex h-full flex-col">
+
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4
+                rounded-xl border border-slate-200 bg-white
+                px-4 py-3 shadow-sm">
+
+        <div class="flex items-center gap-4">
+
+            <label class="flex cursor-pointer items-center gap-2
+                          text-sm text-slate-600">
+
+                <input id="selectAllMessages"
+                       type="checkbox"
+                       class="rounded border-slate-300
+                              text-blue-600 focus:ring-blue-500" />
+
+                <span>Tümünü Seç</span>
+
+            </label>
+
+            <a href="/Message/Index/"
+               title="Yenile"
+               class="flex items-center justify-center
+                      text-slate-500 transition
+                      hover:text-blue-600">
+
+                <span class="material-symbols-outlined">
+                    refresh
+                </span>
+
+            </a>
+
+            <button type="button"
+                    title="Okundu olarak işaretle"
+                    class="flex items-center justify-center
+                           text-slate-500 transition
+                           hover:text-blue-600">
+
+                <span class="material-symbols-outlined">
+                    mark_email_read
+                </span>
+
+            </button>
+
+            <button type="button"
+                    title="Sil"
+                    class="flex items-center justify-center
+                           text-slate-500 transition
+                           hover:text-red-600">
+
+                <span class="material-symbols-outlined">
+                    delete
+                </span>
+
+            </button>
+
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+
+            <select class="rounded-lg border border-slate-200
+                           bg-slate-50 px-3 py-2
+                           text-sm text-slate-700
+                           focus:border-blue-500 focus:ring-blue-500">
+
+                <option value="">Tümü</option>
+                <option value="unread">Okunmamış</option>
+                <option value="read">Okunmuş</option>
+
+            </select>
+
+            <select class="rounded-lg border border-slate-200
+                           bg-slate-50 px-3 py-2
+                           text-sm text-slate-700
+                           focus:border-blue-500 focus:ring-blue-500">
+
+                <option value="newest">En Yeni</option>
+                <option value="oldest">En Eski</option>
+
+            </select>
+
+            <button type="button"
+                    class="flex items-center gap-2 rounded-lg
+                           bg-blue-600 px-4 py-2
+                           text-sm font-semibold text-white
+                           transition hover:bg-blue-700">
+
+                <span class="material-symbols-outlined text-lg">
+                    filter_list
+                </span>
+
+                <span>Filtrele</span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="flex min-h-0 flex-1 flex-col overflow-hidden
+                rounded-xl border border-slate-200
+                bg-white shadow-sm">
+
+        <div class="flex-1 overflow-y-auto">
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    var senderFullName = item.Sender != null
+                    ? $"{item.Sender.FirstName} {item.Sender.LastName}"
+                    : "Bilinmeyen Kullanıcı";
+
+                    var firstInitial = !string.IsNullOrWhiteSpace(
+                    item.Sender?.FirstName)
+                    ? item.Sender.FirstName.Substring(0, 1)
+                    : "";
+
+                    var lastInitial = !string.IsNullOrWhiteSpace(
+                    item.Sender?.LastName)
+                    ? item.Sender.LastName.Substring(0, 1)
+                    : "";
+
+                    var initials = $"{firstInitial}{lastInitial}".ToUpper();
+
+                    if (string.IsNullOrWhiteSpace(initials))
+                    {
+                        initials = "?";
+                    }
+
+                    var rowBackground = item.IsRead
+                    ? "bg-slate-50/50"
+                    : "bg-white";
+
+                    var senderStyle = item.IsRead
+                    ? "font-medium text-slate-700"
+                    : "font-semibold text-slate-900";
+
+                    var subjectStyle = item.IsRead
+                    ? "font-medium text-slate-700"
+                    : "font-semibold text-slate-900";
+
+                    <div class="@rowBackground flex items-center gap-3
+                                        border-b border-slate-100
+                                        px-4 py-4 transition
+                                        hover:bg-slate-50">
+
+                        <input type="checkbox"
+                               name="selectedMessages"
+                               value="@item.Id"
+                               aria-label="@senderFullName mesajını seç"
+                               class="message-checkbox shrink-0 rounded
+                                              border-slate-300 text-blue-600
+                                              focus:ring-blue-500" />
+
+                        <form method="post"
+                              action="/Message/ChangeImportantStatus/"
+                              class="flex shrink-0">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@item.Id" />
+
+                            <input type="hidden"
+                                   name="returnAction"
+                                   value="Index" />
+
+                            <button type="submit"
+                                    title="@(item.IsImportant
+                                                    ? "Önemli işaretini kaldır"
+                                                    : "Önemli olarak işaretle")"
+                                                                               class="flex items-center justify-center
+                                                                      transition
+                           @(item.IsImportant
+                                                           ? "text-amber-500"
+                                                           : "text-slate-400 hover:text-amber-500")">
+
+                        <span class="material-symbols-outlined
+                     @(item.IsImportant ? "filled-icon" : "")">
+                            star
+                        </span>
+
+                            </button>
+
+                        </form>
+                        <form method="post"
+                              action="/Message/MoveToTrash/"
+                              class="flex shrink-0">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@item.Id" />
+
+                            <button type="submit"
+                                    title="Çöp kutusuna taşı"
+                                    onclick="return confirm('Bu mesaj çöp kutusuna taşınsın mı?');"
+                                    class="flex items-center justify-center
+                           text-slate-400 transition
+                           hover:text-red-600">
+
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+
+                            </button>
+
+                        </form>
+                        <a href="/Message/MailDetail/@item.Id"
+                           class="flex min-w-0 flex-1 items-center gap-3">
+
+                            <div class="flex h-9 w-9 shrink-0
+                                                items-center justify-center
+                                                rounded-full bg-blue-100
+                                                font-semibold text-blue-600">
+
+                                @initials
+
+                            </div>
+
+                            <div class="flex w-44 shrink-0 items-center gap-2">
+
+                                @if (!item.IsRead)
+                                {
+                                    <span class="h-2 w-2 shrink-0
+                                                             rounded-full bg-blue-600">
+                                    </span>
+                                }
+
+                            <span class="@senderStyle truncate">
+                                @senderFullName
+                            </span>
+
+                        </div>
+
+                        <div class="min-w-0 flex-1 truncate">
+
+                            <span class="@subjectStyle">
+                                @item.Subject
+                            </span>
+
+                            <span class="text-slate-500">
+                                −
+                                @(string.IsNullOrWhiteSpace(item.Body)
+                                                            ? "Mesaj içeriği bulunmuyor."
+                                                            : item.Body)
+                                                                    </span>
+
+                        </div>
+
+                        <span class="shrink-0 text-sm
+                                             @(item.IsRead
+                                                                           ? "text-slate-500"
+                                                                           : "font-semibold text-slate-700")">
+
+                        @if (item.SendTime.Date == DateTime.Today)
+                                {
+                                    @item.SendTime.ToString("HH:mm")
+                                }
+                                else if (item.SendTime.Date ==
+                                DateTime.Today.AddDays(-1))
+                                {
+                                    <text>Dün</text>
+                                }
+                                else if (item.SendTime.Year ==
+                                DateTime.Today.Year)
+                                {
+                                    @item.SendTime.ToString("dd MMM")
+                                }
+                                else
+                                {
+                                    @item.SendTime.ToString("dd.MM.yyyy")
+                                }
+
+                            </span>
+
+                        </a>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="flex min-h-80 flex-col
+                                items-center justify-center
+                                px-6 py-16 text-center">
+
+                    <div class="mb-4 flex h-16 w-16
+                                    items-center justify-center
+                                    rounded-full bg-blue-50">
+
+                        <span class="material-symbols-outlined
+                                         text-3xl text-blue-600">
+                            inbox
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-slate-800">
+                        Gelen kutunuz boş
+                    </h3>
+
+                    <p class="mt-2 text-sm text-slate-500">
+                        Size gönderilen mesajlar burada görüntülenecek.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="flex items-center justify-between
+                            border-t border-slate-200 px-4 py-3">
+
+                <p class="text-sm text-slate-500">
+                    Toplam @Model.Count mesaj
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const selectAllCheckbox =
+            document.getElementById("selectAllMessages");
+
+        const messageCheckboxes =
+            document.querySelectorAll(".message-checkbox");
+
+        if (!selectAllCheckbox) {
+            return;
+        }
+
+        selectAllCheckbox.addEventListener("change", function () {
+
+            messageCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+
+        });
+
+        messageCheckboxes.forEach(function (checkbox) {
+
+            checkbox.addEventListener("change", function () {
+
+                const selectedCount =
+                    document.querySelectorAll(
+                        ".message-checkbox:checked"
+                    ).length;
+
+                selectAllCheckbox.checked =
+                    selectedCount === messageCheckboxes.length;
+
+                selectAllCheckbox.indeterminate =
+                    selectedCount > 0 &&
+                    selectedCount < messageCheckboxes.length;
+
+            });
+
+        });
+
+    });
+</script>

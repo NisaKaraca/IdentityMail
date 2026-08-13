@@ -1,0 +1,268 @@
+﻿@using IdentityMail.Web.Entities
+@model List<UserMessage>
+
+@{
+    ViewData["Title"] = "Gönderilenler";
+    Layout = "~/Views/MailLayout/Index.cshtml";
+}
+
+<div class="flex h-full flex-col">
+
+    <div class="mb-4 flex flex-wrap items-center justify-between
+                gap-4 rounded-xl border border-slate-200
+                bg-white px-5 py-4 shadow-sm">
+
+        <div>
+
+            <h1 class="text-xl font-bold text-slate-900">
+                Gönderilenler
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Gönderdiğiniz mesajları buradan görüntüleyebilirsiniz.
+            </p>
+
+        </div>
+
+        <div class="flex items-center gap-3">
+
+            <a href="/Message/Sent/"
+               title="Yenile"
+               class="flex h-10 w-10 items-center
+                      justify-center rounded-lg
+                      text-slate-500 transition
+                      hover:bg-slate-100
+                      hover:text-blue-600">
+
+                <span class="material-symbols-outlined">
+                    refresh
+                </span>
+
+            </a>
+
+            <a href="/Message/SendMail/"
+               class="flex items-center gap-2 rounded-lg
+                      bg-blue-600 px-4 py-2.5
+                      text-sm font-semibold text-white
+                      transition hover:bg-blue-700">
+
+                <span class="material-symbols-outlined text-[19px]">
+                    edit
+                </span>
+
+                <span>Yeni Mesaj</span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="flex min-h-0 flex-1 flex-col
+                overflow-hidden rounded-xl
+                border border-slate-200
+                bg-white shadow-sm">
+
+        <div class="flex-1 overflow-y-auto">
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    var receiverFullName = item.Receiver != null
+                    ? $"{item.Receiver.FirstName} {item.Receiver.LastName}"
+                    : "Bilinmeyen Kullanıcı";
+
+                    var receiverEmail = item.Receiver?.Email
+                    ?? "E-posta bulunamadı";
+
+                    var firstInitial =
+                    !string.IsNullOrWhiteSpace(item.Receiver?.FirstName)
+                    ? item.Receiver.FirstName.Substring(0, 1)
+                    : "";
+
+                    var lastInitial =
+                    !string.IsNullOrWhiteSpace(item.Receiver?.LastName)
+                    ? item.Receiver.LastName.Substring(0, 1)
+                    : "";
+
+                    var initials =
+                    $"{firstInitial}{lastInitial}".ToUpper();
+
+                    if (string.IsNullOrWhiteSpace(initials))
+                    {
+                        initials = "?";
+                    }
+
+                <div class="flex items-center gap-3
+                                    border-b border-slate-100
+                                    px-4 py-4 transition
+                                    hover:bg-slate-50">
+
+                    <input type="checkbox"
+                           name="selectedMessages"
+                           value="@item.Id"
+                           aria-label="@receiverFullName mesajını seç"
+                           class="message-checkbox shrink-0
+                                          rounded border-slate-300
+                                          text-blue-600
+                                          focus:ring-blue-500" />
+
+                    <span class="material-symbols-outlined
+                                         shrink-0 text-slate-400"
+                          title="Gönderildi">
+                        send
+                    </span>
+
+                    <a href="/Message/SentMessageDetail/@item.Id"
+                       class="flex min-w-0 flex-1
+                                      items-center gap-3">
+
+                        <div class="flex h-9 w-9 shrink-0
+                                            items-center justify-center
+                                            rounded-full bg-emerald-100
+                                            font-semibold text-emerald-600">
+
+                            @initials
+
+                        </div>
+
+                        <div class="w-52 shrink-0 min-w-0">
+
+                            <p class="truncate font-semibold
+                                              text-slate-900">
+                                @receiverFullName
+                            </p>
+
+                            <p class="truncate text-xs text-slate-500">
+                                @receiverEmail
+                            </p>
+
+                        </div>
+
+                        <div class="min-w-0 flex-1 truncate">
+
+                            <span class="font-semibold text-slate-800">
+                                @item.Subject
+                            </span>
+
+                            <span class="text-slate-500">
+                                −
+                                @(string.IsNullOrWhiteSpace(item.Body)
+                                                            ? "Mesaj içeriği bulunmuyor."
+                                                            : item.Body)
+                        </span>
+
+                            </div>
+
+                            <div class="flex shrink-0 items-center gap-1">
+
+                        @if (item.IsRead)
+                                {
+                                    <span class="material-symbols-outlined
+                                                             text-[18px] text-blue-600"
+                                          title="Alıcı tarafından okundu">
+                                        done_all
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="material-symbols-outlined
+                                                             text-[18px] text-slate-400"
+                                          title="Henüz okunmadı">
+                                        done
+                                    </span>
+                                }
+
+                            </div>
+
+                            <span class="w-24 shrink-0 text-right
+                                                 text-sm text-slate-500">
+
+                                @if (item.SendTime.Date == DateTime.Today)
+                                {
+                                    @item.SendTime.ToString("HH:mm")
+                                }
+                                else if (item.SendTime.Date ==
+                                DateTime.Today.AddDays(-1))
+                                {
+                                    <text>Dün</text>
+                                }
+                                else if (item.SendTime.Year ==
+                                DateTime.Today.Year)
+                                {
+                                    @item.SendTime.ToString("dd MMM")
+                                }
+                                else
+                                {
+                                    @item.SendTime.ToString("dd.MM.yyyy")
+                                }
+
+                            </span>
+
+                        </a>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="flex min-h-80 flex-col
+                                items-center justify-center
+                                px-6 py-16 text-center">
+
+                    <div class="mb-4 flex h-16 w-16
+                                    items-center justify-center
+                                    rounded-full bg-blue-50">
+
+                        <span class="material-symbols-outlined
+                                         text-3xl text-blue-600">
+                            send
+                        </span>
+
+                    </div>
+
+                    <h2 class="text-lg font-semibold text-slate-800">
+                        Gönderilmiş mesajınız yok
+                    </h2>
+
+                    <p class="mt-2 text-sm text-slate-500">
+                        Gönderdiğiniz mesajlar burada görüntülenecek.
+                    </p>
+
+                    <a href="/Message/SendMail/"
+                       class="mt-5 flex items-center gap-2
+                                  rounded-lg bg-blue-600
+                                  px-5 py-2.5 text-sm
+                                  font-semibold text-white
+                                  transition hover:bg-blue-700">
+
+                        <span class="material-symbols-outlined text-[19px]">
+                            edit
+                        </span>
+
+                        <span>Yeni Mesaj Yaz</span>
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="flex items-center justify-between
+                            border-t border-slate-200
+                            px-4 py-3">
+
+                <p class="text-sm text-slate-500">
+                    Toplam @Model.Count gönderilmiş mesaj
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

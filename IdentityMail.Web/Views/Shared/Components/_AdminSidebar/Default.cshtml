@@ -1,0 +1,150 @@
+﻿@{
+    var controllerName =
+        ViewContext.RouteData.Values["controller"]?
+        .ToString();
+}
+
+<nav class="hidden md:flex flex-col
+            h-screen w-sidebar-width
+            fixed left-0 top-0
+            bg-surface
+            border-r border-surface-variant
+            shadow-sm z-30 p-md">
+
+    <div class="mb-xl px-sm">
+
+        <h1 class="text-2xl font-bold text-primary">
+            IdentityMail
+        </h1>
+
+        <p class="text-sm text-on-surface-variant">
+            Admin Dashboard
+        </p>
+
+    </div>
+
+    <div class="flex flex-col gap-sm flex-grow">
+
+        <a asp-controller="AdminDashboard"
+           asp-action="Index"
+           class="flex items-center gap-md px-md py-sm rounded-lg
+                  transition-colors
+                  @(controllerName == "AdminDashboard"
+                                 ? "bg-secondary-container text-on-secondary-container border-l-4 border-primary"
+                                 : "text-on-surface-variant hover:bg-surface-container-low")">
+
+            <span class="material-symbols-outlined"
+                  style="font-variation-settings:
+                         'FILL' @(controllerName == "AdminDashboard" ? 1 : 0);">
+                dashboard
+            </span>
+
+            <span>Dashboard</span>
+
+        </a>
+
+        <a asp-controller="AdminUser"
+           asp-action="Index"
+           class="flex items-center gap-md px-md py-sm rounded-lg
+          transition-colors
+          @(controllerName == "AdminUser"
+                         ? "bg-secondary-container text-on-secondary-container border-l-4 border-primary"
+                         : "text-on-surface-variant hover:bg-surface-container-low")">
+
+            <span class="material-symbols-outlined">
+                group
+            </span>
+
+            <span>Kullanıcılar</span>
+
+        </a>
+
+        <a asp-controller="AdminMessage"
+           asp-action="Index"
+           class="flex items-center gap-md px-md py-sm rounded-lg
+                  transition-colors
+                  @(controllerName == "AdminMessage"
+                                 ? "bg-secondary-container text-on-secondary-container border-l-4 border-primary"
+                                 : "text-on-surface-variant hover:bg-surface-container-low")">
+
+            <span class="material-symbols-outlined">
+                mail
+            </span>
+
+            <span>Mesajlar</span>
+
+        </a>
+
+        <a asp-controller="AdminCategory"
+           asp-action="Index"
+           class="flex items-center gap-md px-md py-sm rounded-lg
+                  transition-colors
+                  @(controllerName == "AdminCategory"
+                                 ? "bg-secondary-container text-on-secondary-container border-l-4 border-primary"
+                                 : "text-on-surface-variant hover:bg-surface-container-low")">
+
+            <span class="material-symbols-outlined">
+                category
+            </span>
+
+            <span>Kategoriler</span>
+
+        </a>
+
+        <a asp-controller="AdminReport"
+           asp-action="Index"
+          
+           class="flex items-center gap-md px-md py-sm rounded-lg
+                  transition-colors
+                  @(controllerName == "AdminReport"
+                                 ? "bg-secondary-container text-on-secondary-container border-l-4 border-primary"
+                                 : "text-on-surface-variant hover:bg-surface-container-low")">
+
+            <span class="material-symbols-outlined">
+                report
+            </span>
+
+            <span>Şikayetler</span>
+
+        </a>
+
+        <a asp-controller="AdminSetting"
+           asp-action="Index"
+           class="flex items-center gap-md px-md py-sm rounded-lg
+                  transition-colors
+                  @(controllerName == "AdminSetting"
+                                 ? "bg-secondary-container text-on-secondary-container border-l-4 border-primary"
+                                 : "text-on-surface-variant hover:bg-surface-container-low")">
+
+            <span class="material-symbols-outlined">
+                settings
+            </span>
+
+            <span>Ayarlar</span>
+
+        </a>
+
+    </div>
+
+    <div class="mt-auto">
+
+        <a asp-controller="Auth"
+           asp-action="Logout"
+           class="flex items-center gap-md
+          text-on-surface-variant
+          hover:bg-error-container
+          hover:text-error
+          transition-colors
+          px-md py-sm rounded-lg">
+
+            <span class="material-symbols-outlined">
+                logout
+            </span>
+
+            <span>Çıkış Yap</span>
+
+        </a>
+
+    </div>
+
+</nav>

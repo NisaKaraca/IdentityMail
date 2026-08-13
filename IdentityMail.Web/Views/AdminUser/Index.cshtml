@@ -1,0 +1,421 @@
+﻿@model List<IdentityMail.Web.DTOs.AdminUserDtos.AdminUserListDto>
+
+@{
+    ViewData["Title"] = "Kullanıcılar";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<section class="mb-lg">
+
+    <div class="flex flex-col gap-md
+                md:flex-row md:items-end md:justify-between">
+
+        <div>
+
+            <h1 class="text-3xl font-bold text-on-surface">
+                Kullanıcılar
+            </h1>
+
+            <p class="mt-xs text-sm text-on-surface-variant">
+                Kayıtlı kullanıcıları görüntüleyin ve yönetin.
+            </p>
+
+        </div>
+
+        <div class="rounded-lg
+                    border border-surface-variant
+                    bg-surface px-md py-sm">
+
+            <span class="text-sm text-on-surface-variant">
+                Toplam:
+            </span>
+
+            <span class="ml-xs font-bold text-primary">
+                @Model.Count
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="mb-md rounded-lg
+                    border border-green-200
+                    bg-green-50 px-md py-sm
+                    text-sm text-green-700">
+
+        @TempData["SuccessMessage"]
+
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="mb-md rounded-lg
+                    border border-red-200
+                    bg-red-50 px-md py-sm
+                    text-sm text-red-700">
+
+        @TempData["ErrorMessage"]
+
+    </div>
+}
+
+<section class="overflow-hidden rounded-xl
+                border border-surface-variant
+                bg-surface shadow-sm">
+
+    <div class="flex flex-col gap-md
+                border-b border-surface-variant
+                p-lg
+                md:flex-row md:items-center md:justify-between">
+
+        <div>
+
+            <h2 class="text-lg font-semibold text-on-surface">
+                Kullanıcı Listesi
+            </h2>
+
+            <p class="mt-1 text-sm text-on-surface-variant">
+                Kullanıcı bilgileri ve mesaj istatistikleri
+            </p>
+
+        </div>
+
+        <form asp-controller="AdminUser"
+              asp-action="Index"
+              method="get"
+              class="flex w-full gap-sm md:max-w-md">
+
+            <div class="relative flex-1">
+
+                <span class="material-symbols-outlined
+                             absolute left-3 top-1/2
+                             -translate-y-1/2
+                             text-xl text-outline">
+
+                    search
+
+                </span>
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       placeholder="Ad, kullanıcı adı veya e-posta..."
+                       class="w-full rounded-lg
+                              border border-surface-variant
+                              bg-surface
+                              py-sm pl-10 pr-sm
+                              text-sm text-on-surface
+                              focus:border-primary
+                              focus:ring-primary" />
+
+            </div>
+
+            <button type="submit"
+                    class="rounded-lg
+                           bg-primary px-md py-sm
+                           text-sm font-semibold text-on-primary
+                           transition-colors hover:bg-primary/90">
+
+                Ara
+
+            </button>
+
+            @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string))
+            {
+                <a asp-controller="AdminUser"
+                   asp-action="Index"
+                   class="flex items-center justify-center
+                              rounded-lg
+                              border border-surface-variant
+                              px-sm text-on-surface-variant
+                              hover:bg-surface-container-low">
+
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+
+                </a>
+            }
+
+        </form>
+
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="overflow-x-auto">
+
+            <table class="w-full min-w-[950px]">
+
+                <thead class="bg-surface-container-low">
+
+                    <tr class="border-b border-surface-variant
+                                   text-left text-xs font-semibold
+                                   uppercase tracking-wider
+                                   text-on-surface-variant">
+
+                        <th class="px-lg py-md">
+                            Kullanıcı
+                        </th>
+
+                        <th class="px-lg py-md">
+                            Kullanıcı Adı
+                        </th>
+
+                        <th class="px-lg py-md">
+                            Gönderilen
+                        </th>
+
+                        <th class="px-lg py-md">
+                            Alınan
+                        </th>
+
+                        <th class="px-lg py-md">
+                            Durum
+                        </th>
+
+                        <th class="px-lg py-md text-right">
+                            İşlem
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-surface-variant">
+
+                    @foreach (var user in Model)
+                    {
+                        var nameParts = user.FullName.Split(
+                        ' ',
+                        StringSplitOptions.RemoveEmptyEntries);
+
+                        var initials = nameParts.Length >= 2
+                        ? $"{nameParts[0][0]}{nameParts[^1][0]}".ToUpper()
+                        : user.FullName.Substring(0, 1).ToUpper();
+
+                        <tr class="transition-colors
+                                           hover:bg-surface-container-low/60">
+
+                            <td class="px-lg py-md">
+
+                                <div class="flex items-center gap-sm">
+
+                                    @if (!string.IsNullOrWhiteSpace(user.ProfileImageUrl))
+                                    {
+                                        <img src="@user.ProfileImageUrl"
+                                             alt="@user.FullName"
+                                             class="h-11 w-11 shrink-0
+                                                                rounded-full object-cover
+                                                                border border-surface-variant" />
+                                    }
+                                    else
+                                    {
+                                        <div class="flex h-11 w-11 shrink-0
+                                                                items-center justify-center
+                                                                rounded-full
+                                                                bg-primary-container
+                                                                text-sm font-bold
+                                                                text-on-primary">
+
+                                            @initials
+
+                                        </div>
+                                    }
+
+                                    <div class="min-w-0">
+
+                                        <p class="truncate font-semibold
+                                                          text-on-surface">
+
+                                            @user.FullName
+
+                                        </p>
+
+                                        <p class="truncate text-sm
+                                                          text-on-surface-variant">
+
+                                            @user.Email
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td class="px-lg py-md">
+
+                                <span class="text-sm text-on-surface">
+                                    @@user.UserName
+                                </span>
+
+                            </td>
+
+                            <td class="px-lg py-md">
+
+                                <div class="flex items-center gap-xs">
+
+                                    <span class="material-symbols-outlined
+                                                         text-lg text-primary">
+                                        send
+                                    </span>
+
+                                    <span class="font-semibold text-on-surface">
+                                        @user.SentMessageCount
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td class="px-lg py-md">
+
+                                <div class="flex items-center gap-xs">
+
+                                    <span class="material-symbols-outlined
+                                                         text-lg text-secondary">
+                                        move_to_inbox
+                                    </span>
+
+                                    <span class="font-semibold text-on-surface">
+                                        @user.ReceivedMessageCount
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td class="px-lg py-md">
+
+                                @if (user.IsActive)
+                                {
+                                    <span class="inline-flex items-center gap-1
+                                                             rounded-full
+                                                             bg-green-100 px-sm py-1
+                                                             text-xs font-semibold
+                                                             text-green-700">
+
+                                        <span class="h-2 w-2
+                                                                 rounded-full bg-green-500">
+                                        </span>
+
+                                        Aktif
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center gap-1
+                                                             rounded-full
+                                                             bg-red-100 px-sm py-1
+                                                             text-xs font-semibold
+                                                             text-red-700">
+
+                                        <span class="h-2 w-2
+                                                                 rounded-full bg-red-500">
+                                        </span>
+
+                                        Pasif
+
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td class="px-lg py-md text-right">
+
+                                <form asp-controller="AdminUser"
+                                      asp-action="ToggleStatus"
+                                      asp-route-id="@user.Id"
+                                      method="post"
+                                      class="inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    @if (user.IsActive)
+                                    {
+                                        <button type="submit"
+                                                onclick="return confirm('Bu kullanıcıyı pasifleştirmek istediğinize emin misiniz?')"
+                                                class="inline-flex items-center gap-xs
+                                                                   rounded-lg border
+                                                                   border-red-200
+                                                                   px-sm py-xs
+                                                                   text-sm font-semibold
+                                                                   text-red-600
+                                                                   transition-colors
+                                                                   hover:bg-red-50">
+
+                                            <span class="material-symbols-outlined
+                                                                     text-lg">
+                                                person_off
+                                            </span>
+
+                                            Pasifleştir
+
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit"
+                                                class="inline-flex items-center gap-xs
+                                                                   rounded-lg border
+                                                                   border-green-200
+                                                                   px-sm py-xs
+                                                                   text-sm font-semibold
+                                                                   text-green-600
+                                                                   transition-colors
+                                                                   hover:bg-green-50">
+
+                                            <span class="material-symbols-outlined
+                                                                     text-lg">
+                                                person_check
+                                            </span>
+
+                                            Aktifleştir
+
+                                        </button>
+                                    }
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="flex min-h-[320px]
+                        flex-col items-center justify-center
+                        p-xl text-center">
+
+            <span class="material-symbols-outlined
+                             mb-sm text-6xl text-outline">
+                group_off
+            </span>
+
+            <h3 class="text-lg font-semibold text-on-surface">
+                Kullanıcı bulunamadı
+            </h3>
+
+            <p class="mt-xs text-sm text-on-surface-variant">
+                Arama kriterlerine uygun kullanıcı bulunmuyor.
+            </p>
+
+        </div>
+    }
+
+</section>

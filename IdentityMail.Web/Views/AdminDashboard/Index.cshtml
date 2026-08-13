@@ -1,0 +1,495 @@
+﻿@model IdentityMail.Web.DTOs.AdminDashboardDtos.AdminDashboardDto
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<section class="mb-lg">
+
+    <h1 class="text-3xl font-bold text-on-surface">
+        Dashboard
+    </h1>
+
+    <p class="mt-xs text-sm text-on-surface-variant">
+        Sistem geneli özet metrikler.
+    </p>
+
+</section>
+
+<section class="grid grid-cols-1
+                md:grid-cols-2
+                xl:grid-cols-3
+                gap-md">
+
+    <div class="relative overflow-hidden
+                flex flex-col gap-sm
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm
+                transition-shadow
+                hover:shadow-md">
+
+        <div class="absolute right-0 top-0 p-md opacity-10">
+
+            <span class="material-symbols-outlined text-6xl">
+                group
+            </span>
+
+        </div>
+
+        <span class="text-xs font-semibold uppercase
+                     tracking-wider text-on-surface-variant">
+
+            Toplam Kullanıcı
+
+        </span>
+
+        <span class="text-3xl font-bold text-primary">
+
+            @Model.TotalUserCount.ToString("N0")
+
+        </span>
+
+        <div class="mt-auto flex items-center gap-xs
+                    text-sm text-on-surface-variant">
+
+            <span class="material-symbols-outlined text-base text-primary">
+                groups
+            </span>
+
+            <span>Kayıtlı kullanıcılar</span>
+
+        </div>
+
+    </div>
+
+    <div class="relative overflow-hidden
+                flex flex-col gap-sm
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm
+                transition-shadow
+                hover:shadow-md">
+
+        <div class="absolute right-0 top-0 p-md opacity-10">
+
+            <span class="material-symbols-outlined text-6xl">
+                person_check
+            </span>
+
+        </div>
+
+        <span class="text-xs font-semibold uppercase
+                     tracking-wider text-on-surface-variant">
+
+            Aktif Kullanıcı
+
+        </span>
+
+        <span class="text-3xl font-bold text-primary">
+
+            @Model.ActiveUserCount.ToString("N0")
+
+        </span>
+
+        <div class="mt-auto flex items-center gap-xs
+                    text-sm text-on-surface-variant">
+
+            <span class="material-symbols-outlined text-base text-primary">
+                verified_user
+            </span>
+
+            <span>Aktif hesaplar</span>
+
+        </div>
+
+    </div>
+
+    <div class="relative overflow-hidden
+                flex flex-col gap-sm
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm
+                transition-shadow
+                hover:shadow-md">
+
+        <div class="absolute right-0 top-0 p-md opacity-10">
+
+            <span class="material-symbols-outlined text-6xl">
+                mail
+            </span>
+
+        </div>
+
+        <span class="text-xs font-semibold uppercase
+                     tracking-wider text-on-surface-variant">
+
+            Toplam Mesaj
+
+        </span>
+
+        <span class="text-3xl font-bold text-primary">
+
+            @Model.TotalMessageCount.ToString("N0")
+
+        </span>
+
+        <div class="mt-auto flex items-center gap-xs
+                    text-sm text-on-surface-variant">
+
+            <span class="material-symbols-outlined text-base text-primary">
+                stacked_line_chart
+            </span>
+
+            <span>Tüm zamanlar</span>
+
+        </div>
+
+    </div>
+
+    <div class="relative overflow-hidden
+                flex flex-col gap-sm
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm
+                transition-shadow
+                hover:shadow-md">
+
+        <div class="absolute right-0 top-0 p-md opacity-10">
+
+            <span class="material-symbols-outlined text-6xl">
+                send
+            </span>
+
+        </div>
+
+        <span class="text-xs font-semibold uppercase
+                     tracking-wider text-on-surface-variant">
+
+            Bugün Gönderilen
+
+        </span>
+
+        <span class="text-3xl font-bold text-primary">
+
+            @Model.TodayMessageCount.ToString("N0")
+
+        </span>
+
+        <div class="mt-auto flex items-center gap-xs
+                    text-sm text-on-surface-variant">
+
+            <span class="material-symbols-outlined text-base text-primary">
+                schedule
+            </span>
+
+            <span>Bugün gönderilenler</span>
+
+        </div>
+
+    </div>
+
+    <div class="relative overflow-hidden
+                flex flex-col gap-sm
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm
+                transition-shadow
+                hover:shadow-md">
+
+        <div class="absolute right-0 top-0 p-md opacity-10">
+
+            <span class="material-symbols-outlined text-6xl">
+                mark_email_unread
+            </span>
+
+        </div>
+
+        <span class="text-xs font-semibold uppercase
+                     tracking-wider text-on-surface-variant">
+
+            Okunmamış Mesaj
+
+        </span>
+
+        <span class="text-3xl font-bold text-primary">
+
+            @Model.UnreadMessageCount.ToString("N0")
+
+        </span>
+
+        <div class="mt-auto flex items-center gap-xs
+                    text-sm text-on-surface-variant">
+
+            <span class="material-symbols-outlined text-base text-primary">
+                drafts
+            </span>
+
+            <span>Henüz okunmayanlar</span>
+
+        </div>
+
+    </div>
+
+    <div class="relative overflow-hidden
+                flex flex-col gap-sm
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm
+                transition-shadow
+                hover:shadow-md">
+
+        <div class="absolute right-0 top-0 p-md opacity-10">
+
+            <span class="material-symbols-outlined text-6xl">
+                delete
+            </span>
+
+        </div>
+
+        <span class="text-xs font-semibold uppercase
+                     tracking-wider text-on-surface-variant">
+
+            Çöp Kutusundaki Mesaj
+
+        </span>
+
+        <span class="text-3xl font-bold text-primary">
+
+            @Model.TrashMessageCount.ToString("N0")
+
+        </span>
+
+        <div class="mt-auto flex items-center gap-xs
+                    text-sm text-on-surface-variant">
+
+            <span class="material-symbols-outlined text-base text-primary">
+                delete_sweep
+            </span>
+
+            <span>Kalıcı silinmemiş mesajlar</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="mt-lg grid grid-cols-1 gap-lg
+                lg:grid-cols-2
+                xl:grid-cols-4">
+
+    
+    <div class="flex h-full flex-col
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm">
+
+        <div class="mb-md flex items-center justify-between gap-sm">
+
+            <h2 class="text-lg font-semibold text-on-surface">
+                En Fazla Mesaj Gönderenler
+            </h2>
+
+            <span class="material-symbols-outlined shrink-0 text-primary">
+                leaderboard
+            </span>
+
+        </div>
+
+        @if (Model.TopSenders != null && Model.TopSenders.Any())
+        {
+            <ul class="flex flex-col gap-sm">
+
+                @foreach (var user in Model.TopSenders)
+                {
+                    var fullName = string.IsNullOrWhiteSpace(user.FullName)
+                    ? "Bilinmeyen Kullanıcı"
+                    : user.FullName;
+
+                    var nameParts = fullName.Split(
+                    ' ',
+                    StringSplitOptions.RemoveEmptyEntries);
+
+                    var initials = nameParts.Length >= 2
+                    ? $"{nameParts[0][0]}{nameParts[^1][0]}".ToUpper()
+                    : fullName.Substring(0, 1).ToUpper();
+
+                    <li class="flex items-center justify-between
+                                       gap-sm rounded-lg
+                                       border border-transparent
+                                       p-sm transition-colors
+                                       hover:border-surface-variant
+                                       hover:bg-surface-container-low">
+
+                        <div class="flex min-w-0 items-center gap-sm">
+
+                            @if (!string.IsNullOrWhiteSpace(user.ImageUrl))
+                            {
+                                <img src="@user.ImageUrl"
+                                     alt="@fullName"
+                                     class="h-9 w-9 shrink-0
+                                                        rounded-full object-cover
+                                                        border border-surface-variant" />
+                            }
+                            else
+                            {
+                                <div class="flex h-9 w-9 shrink-0
+                                                        items-center justify-center
+                                                        rounded-full
+                                                        bg-primary-container
+                                                        text-xs font-bold
+                                                        text-on-primary">
+
+                                    @initials
+
+                                </div>
+                            }
+
+                            <span class="truncate text-sm
+                                                 font-medium text-on-surface">
+
+                                @fullName
+
+                            </span>
+
+                        </div>
+
+                        <span class="shrink-0 rounded
+                                             bg-surface-container-high
+                                             px-xs py-1
+                                             text-xs font-semibold
+                                             text-on-surface-variant">
+
+                            @user.MessageCount msj
+
+                        </span>
+
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <div class="flex flex-1 flex-col
+                            items-center justify-center
+                            py-xl text-center
+                            text-on-surface-variant">
+
+                <span class="material-symbols-outlined mb-xs text-4xl">
+                    mail
+                </span>
+
+                <p class="text-sm">
+                    Henüz gönderilmiş mesaj bulunmuyor.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+    <div class="flex h-full flex-col
+                rounded-xl
+                border border-surface-variant
+                bg-surface p-lg
+                shadow-sm">
+
+        <div class="mb-md flex items-center justify-between gap-sm">
+
+            <h2 class="text-lg font-semibold text-on-surface">
+                En Çok Kullanılan Kategoriler
+            </h2>
+
+            <span class="material-symbols-outlined shrink-0 text-primary">
+                category
+            </span>
+
+        </div>
+
+        @if (Model.TopCategories != null &&
+                Model.TopCategories.Any())
+        {
+            <div class="flex flex-col gap-md">
+
+                @foreach (var category in Model.TopCategories)
+                {
+                    var percentage = category.Percentage.ToString(
+                    System.Globalization.CultureInfo.InvariantCulture);
+
+                    var categoryColor =
+                    string.IsNullOrWhiteSpace(category.Color)
+                    ? "#2563eb"
+                    : category.Color;
+
+                    <div class="flex flex-col gap-xs">
+
+                        <div class="flex items-center
+                                            justify-between gap-sm
+                                            text-sm text-on-surface">
+
+                            <span class="truncate">
+                                @category.CategoryName
+                            </span>
+
+                            <span class="shrink-0 text-xs
+                                                 font-semibold
+                                                 text-on-surface-variant">
+
+                                %@category.Percentage
+
+                            </span>
+
+                        </div>
+
+                        <div class="h-2 w-full overflow-hidden
+                                            rounded-full
+                                            bg-surface-container-highest">
+
+                            <div class="h-full rounded-full
+                                                transition-all duration-500"
+                                 style="width: @percentage%;
+                                                background-color: @categoryColor;">
+                            </div>
+
+                        </div>
+
+                        <p class="text-xs text-on-surface-variant">
+                            @category.UsageCount kullanım
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="flex flex-1 flex-col
+                            items-center justify-center
+                            py-xl text-center
+                            text-on-surface-variant">
+
+                <span class="material-symbols-outlined mb-xs text-4xl">
+                    category
+                </span>
+
+                <p class="text-sm">
+                    Henüz kategori kullanımı bulunmuyor.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</section>
