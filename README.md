@@ -45,7 +45,7 @@ Admin kullanıcıları ise sistem genelindeki kullanıcıları, mesajları, kate
 
 ### Admin Dashboard
 
-![Admin Dashboard](screenshots/admin-dashboard.png)
+<img width="1895" height="983" alt="image (10)" src="https://github.com/user-attachments/assets/8d29c169-f122-4b91-b292-687988b84e90" />
 
 ### Admin Kullanıcı Yönetimi
 
